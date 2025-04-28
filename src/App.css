@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap');
+@import url('https://fonts.cdnfonts.com/css/opendyslexic');
+
+:root {
+  --primary-color: #6a1b9a;
+  --secondary-color: #9c27b0;
+  --accent-color: #e040fb;
+  --background-color: #f5f5f5;
+  --text-color: #333;
+  --success-color: #4caf50;
+  --warning-color: #ff9800;
+  --error-color: #f44336;
+  --cursor-size: 16px;
+  --focus-outline-width: 3px;
+  --focus-outline-color: var(--primary-color);
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+/* Accessibility Styles */
+.high-contrast {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+.high-contrast a,
+.high-contrast button:not(.MuiFab-root) {
+  color: #ffee00 !important;
+}
+
+.high-contrast .MuiFab-root {
+  background-color: #ffee00 !important;
+  color: #000 !important;
+}
+
+.high-contrast input,
+.high-contrast textarea {
+  background-color: #000 !important;
+  color: #fff !important;
+  border: 2px solid #fff !important;
+}
+
+/* Increased readability for focus states */
+*:focus {
+  outline: var(--focus-outline-width) solid var(--focus-outline-color) !important;
+  outline-offset: 2px !important;
+}
+
+/* Enhanced keyboard navigation styles */
+.keyboard-navigation *:focus {
+  outline: var(--focus-outline-width) solid var(--focus-outline-color) !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 4px rgba(77, 144, 254, 0.3) !important;
+}
+
+.keyboard-navigation button:focus,
+.keyboard-navigation a:focus,
+.keyboard-navigation input:focus,
+.keyboard-navigation select:focus,
+.keyboard-navigation textarea:focus {
+  transform: scale(1.02) !important;
+}
+
+/* Ensure floating buttons are accessible */
+.MuiFab-root {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+  transition: transform 0.3s ease !important;
+}
+
+.MuiFab-root:hover,
+.MuiFab-root:focus {
+  transform: scale(1.05) !important;
+}
+
+/* Accessibility panel styles */
+.accessibility-panel {
+  border-radius: 12px !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Reduced motion styles */
+.reduce-motion * {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+}
+
+.reduce-motion .MuiFab-root:hover,
+.reduce-motion .MuiFab-root:focus {
+  transform: none !important;
+  background-color: var(--primary-color) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Text direction styles */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="ltr"] {
+  text-align: left;
+}
+
+/* Custom cursor size */
+* {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='var(--cursor-size)' height='var(--cursor-size)' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='rgba(106, 27, 154, 0.2)' stroke='%236a1b9a' stroke-width='1'/%3E%3C/svg%3E") var(--cursor-size) var(--cursor-size), auto !important;
+}
+
+/* OpenDyslexic font already imported at the top */
+.dyslexic-font {
+  font-family: 'OpenDyslexic', sans-serif !important;
+  line-height: 1.6 !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* Enhanced animation transition for UI elements */
+button, a, .MuiButton-root {
+  transition: all 0.3s ease;
+}
+
+.reduce-motion button,
+.reduce-motion a,
+.reduce-motion .MuiButton-root {
+  transition: none !important;
+}
+
+/* Adjust form controls for better accessibility */
+.MuiFormControlLabel-root {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* RTL specific adjustments */
+[dir="rtl"] .MuiFormControlLabel-root {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .MuiSlider-root {
+  direction: ltr;
+  transform: scaleX(-1);
+}
+
+[dir="rtl"] .MuiSlider-root .MuiSlider-markLabel {
+  transform: scaleX(-1);
+}
+
+/* Better focus for select elements */
+.MuiSelect-root:focus {
+  background-color: rgba(106, 27, 154, 0.1) !important;
+}
