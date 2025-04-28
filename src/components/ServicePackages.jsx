@@ -81,45 +81,72 @@ const PackageCard = ({ packageInfo, isPopular, onSelect }) => {
   
   return (
     <Card 
-      elevation={isPopular ? 8 : 3}
+      elevation={3}
       sx={{ 
         height: '100%', 
         display: 'flex', 
         flexDirection: 'column',
         position: 'relative',
-        transition: 'transform 0.3s, box-shadow 0.3s',
+        transition: 'all 0.3s ease',
         '&:hover': {
-          transform: 'translateY(-8px)',
-          boxShadow: 8
-        },
-        border: isPopular ? `2px solid ${theme.palette.secondary.main}` : 'none'
+          transform: 'translateY(-10px)',
+          boxShadow: 10,
+          border: `2px solid ${theme.palette.primary.main}`,
+          '& .price-text': {
+            color: 'primary.main',
+            transform: 'scale(1.05)',
+          },
+          '& .package-title': {
+            color: 'primary.main',
+          }
+        }
       }}
     >
       {isPopular && (
-        <Box 
+        <Typography 
+          variant="subtitle1" 
           sx={{ 
-            position: 'absolute', 
-            top: 0, 
-            right: 0, 
-            bgcolor: 'secondary.main', 
-            color: 'white',
-            py: 0.5,
-            px: 2,
-            borderBottomLeftRadius: 8
+            position: 'absolute',
+            top: 10,
+            left: 0,
+            right: 0,
+            textAlign: 'center',
+            color: theme.palette.primary.main,
+            fontWeight: 'bold',
+            fontSize: '1rem',
+            zIndex: 1
           }}
         >
-          <Typography variant="subtitle2" fontWeight="bold">
-            פופולרי ביותר
-          </Typography>
-        </Box>
+          ✓ החבילה הפופולרית ביותר
+        </Typography>
       )}
       
-      <CardContent sx={{ flexGrow: 1, p: 3 }}>
-        <Typography variant="h5" component="h3" gutterBottom fontWeight="bold" align="center">
+      <CardContent sx={{ flexGrow: 1, p: 3, pt: isPopular ? 5 : 3 }}>
+        <Typography 
+          className="package-title"
+          variant="h5" 
+          component="h3" 
+          gutterBottom 
+          fontWeight="bold" 
+          align="center"
+          color="text.primary"
+          sx={{ transition: 'color 0.3s ease' }}
+        >
           {packageInfo.name}
         </Typography>
         
-        <Typography variant="h4" component="div" align="center" color="primary.main" sx={{ mb: 3 }}>
+        <Typography 
+          className="price-text"
+          variant="h4" 
+          component="div" 
+          align="center" 
+          color="text.primary" 
+          sx={{ 
+            mb: 3,
+            fontWeight: 'bold',
+            transition: 'all 0.3s ease'
+          }}
+        >
           ₪{packageInfo.price.toLocaleString()}
         </Typography>
         
@@ -127,7 +154,7 @@ const PackageCard = ({ packageInfo, isPopular, onSelect }) => {
           {packageInfo.features.map((feature, index) => (
             <ListItem key={index} disablePadding sx={{ mb: 1 }}>
               <ListItemIcon sx={{ minWidth: 30 }}>
-                <CheckIcon color="success" fontSize="small" />
+                <CheckIcon color="primary" fontSize="small" />
               </ListItemIcon>
               <ListItemText primary={feature} />
             </ListItem>
@@ -139,7 +166,7 @@ const PackageCard = ({ packageInfo, isPopular, onSelect }) => {
         <Button 
           variant="contained" 
           fullWidth 
-          color={isPopular ? "secondary" : "primary"}
+          color="primary"
           size="large"
           component={RouterLink}
           to={`/contact?package=${encodeURIComponent(packageInfo.name)}&price=${packageInfo.price}`}
@@ -293,7 +320,14 @@ const ServicePackages = ({ serviceName }) => {
         </Typography>
         
         {/* Predefined Packages */}
-        <Grid container spacing={3} sx={{ mb: 8 }}>
+        <Grid 
+          container 
+          spacing={4} 
+          sx={{ 
+            mb: 8,
+            justifyContent: 'center'
+          }}
+        >
           <Grid item xs={12} md={4}>
             <PackageCard 
               packageInfo={packageData.basic} 

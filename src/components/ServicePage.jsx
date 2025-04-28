@@ -22,10 +22,11 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
 import { contactData } from '../data/cmsData';
-// Import available images directly
-import weddingImg from '../assets/images/pexels-minan1398-752842.jpg';
-import barmitzvahImg from '../assets/images/pexels-pixabay-265722.jpg';
-import hennaImg from '../assets/images/pexels-emma-bauso-1183828-2253870.jpg';
+
+// Define image paths directly
+const weddingImg = './images/services/wedding.jpg';
+const barmitzvahImg = './images/services/barmitzvah.jpg';
+const hennaImg = './images/services/henna.jpg';
 
 // Wrap MUI components with motion
 const MotionBox = motion(Box);
@@ -297,17 +298,16 @@ const ServicePage = ({ service }) => {
             top: '50%', 
             transform: 'translateY(-50%)',
             color: 'white',
-            bgcolor: 'rgba(0,0,0,0.3)',
-            '&:hover': { bgcolor: 'rgba(0,0,0,0.5)' }
+            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            },
+            zIndex: 2
           }}
           onClick={() => changeImage('prev')}
-          component={motion.button}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
         >
-          <ArrowBackIcon fontSize="large" />
+          <ArrowForwardIcon />
         </IconButton>
-        
         <IconButton 
           sx={{ 
             position: 'absolute', 
@@ -315,23 +315,29 @@ const ServicePage = ({ service }) => {
             top: '50%', 
             transform: 'translateY(-50%)',
             color: 'white',
-            bgcolor: 'rgba(0,0,0,0.3)',
-            '&:hover': { bgcolor: 'rgba(0,0,0,0.5)' }
+            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            },
+            zIndex: 2
           }}
           onClick={() => changeImage('next')}
-          component={motion.button}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
         >
-          <ArrowForwardIcon fontSize="large" />
+          <ArrowBackIcon />
         </IconButton>
 
         <MotionContainer
           variants={containerVariants}
           initial="hidden"
           animate="visible"
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
         >
-          <Box sx={{ maxWidth: 700 }}>
+          <Box sx={{ maxWidth: 700, textAlign: 'center' }}>
             <MotionTypography 
               variant="h2" 
               component="h1" 
@@ -362,7 +368,8 @@ const ServicePage = ({ service }) => {
               sx={{ 
                 display: 'flex', 
                 flexWrap: 'wrap', 
-                gap: 2 
+                gap: 2,
+                justifyContent: 'center'
               }}
             >
               <MotionButton 
@@ -445,7 +452,7 @@ const ServicePage = ({ service }) => {
           >
             בחר את החבילה המושלמת עבורך
           </MotionTypography>
-          
+
           {/* Package Tabs */}
           <Box 
             sx={{ 
@@ -538,10 +545,23 @@ const ServicePage = ({ service }) => {
                   sx={{ 
                     mb: 4,
                     color: 'secondary.main',
-                    fontWeight: 'bold'
+                    fontWeight: 'bold',
+                    fontSize: servicePackages[activePackage].price >= 10000 ? { xs: '2.5rem', md: '3rem' } : { xs: '2rem', md: '2.5rem' }
                   }}
                 >
                   ₪{servicePackages[activePackage].price.toLocaleString()}
+                  {servicePackages[activePackage].price >= 10000 && 
+                    <Box component="span" sx={{ 
+                      display: 'inline-block',
+                      fontSize: '1rem',
+                      ml: 1,
+                      color: 'text.secondary',
+                      fontWeight: 'normal',
+                      verticalAlign: 'middle'
+                    }}>
+                      החבילה המומלצת שלנו!
+                    </Box>
+                  }
                 </MotionTypography>
                 
                 <Box

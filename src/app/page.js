@@ -12,7 +12,7 @@ export default function Home() {
         <h1 className="text-4xl md:text-5xl font-bold mb-6">הקסם של האירוע</h1>
         <p className="text-xl md:text-2xl mb-8">הפקת אירועים מושלמים לכל רגע מיוחד בחיים שלכם</p>
         <div className="flex flex-wrap justify-center gap-4">
-          <Link href="/contact" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold transition duration-300">
+          <Link href="./contact" className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-bold transition duration-300">
             צרו קשר עכשיו
           </Link>
           <a href="tel:+972501234567" className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-bold transition duration-300">
@@ -83,7 +83,7 @@ export default function Home() {
         <h2 className="text-3xl md:text-4xl font-bold mb-6">מוכנים להפוך את החלום למציאות?</h2>
         <p className="text-xl mb-8">צרו איתנו קשר עוד היום ונתחיל לתכנן את האירוע המושלם</p>
         <div className="flex flex-wrap justify-center gap-4">
-          <Link href="/contact" className="bg-white text-blue-600 hover:bg-gray-100 px-6 py-3 rounded-lg font-bold transition duration-300">
+          <Link href="./contact" className="bg-white text-blue-600 hover:bg-gray-100 px-6 py-3 rounded-lg font-bold transition duration-300">
             השאירו פרטים
           </Link>
           <a href="https://wa.me/972501234567" className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-bold transition duration-300 flex items-center">

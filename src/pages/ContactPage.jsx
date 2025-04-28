@@ -24,13 +24,13 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { contactData, servicesData } from '../data/cmsData';
-import logoImage from '../assets/images/לוגו עם סלוגן.png';
-import heroBackground from '../assets/images/pexels-minan1398-752842.jpg';
 
 const ContactPage = () => {
   // Simulate data loading from CMS
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const logoImage = './assets/logo-with-slogan.png';
+  const heroBackground = './assets/gallery/wedding-1.jpg';
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',

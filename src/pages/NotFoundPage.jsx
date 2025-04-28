@@ -1,8 +1,9 @@
 import { Container, Typography, Box, Button } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-import logoImage from '../assets/images/לוגו עם סלוגן.png';
 
 const NotFoundPage = () => {
+  const logoImage = './assets/logo-with-slogan.png';
+  
   return (
     <Container maxWidth="md">
       <Box

@@ -1,26 +1,28 @@
-import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
-import RTLProvider from './components/RTLProvider';
-import Layout from './components/Layout';
-import HomePage from './pages/HomePage';
-import ContactPage from './pages/ContactPage';
-import NotFoundPage from './pages/NotFoundPage';
-import ServicePage from './pages/ServicePage';
-import HowItWorksPage from './pages/HowItWorksPage';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import RTLProvider from './components/RTLProvider.jsx';
+import Layout from './components/Layout.jsx';
+import ScrollToTop from './components/ScrollToTop.jsx';
+import HomePage from './pages/HomePage.jsx';
+import ContactPage from './pages/ContactPage.jsx';
+import NotFoundPage from './pages/NotFoundPage.jsx';
+import ServicePage from './pages/ServicePage.jsx';
+import HowItWorksPage from './pages/HowItWorksPage.jsx';
 import { getServiceBySlug } from './data/services';
 
 // Import dedicated service pages
-import WeddingPage from './pages/services/WeddingPage';
-import BarmitzvahPage from './pages/services/BarmitzvahPage';
-import BatmitzvahPage from './pages/services/BatmitzvahPage';
-import BritPage from './pages/services/BritPage';
-import HennaPage from './pages/services/HennaPage';
-import BirthdayPage from './pages/services/BirthdayPage';
-import BusinessPage from './pages/services/BusinessPage';
+import WeddingPage from './pages/services/WeddingPage.jsx';
+import BarmitzvahPage from './pages/services/BarmitzvahPage.jsx';
+import BatmitzvahPage from './pages/services/BatmitzvahPage.jsx';
+import BritPage from './pages/services/BritPage.jsx';
+import HennaPage from './pages/services/HennaPage.jsx';
+import BirthdayPage from './pages/services/BirthdayPage.jsx';
+import BusinessPage from './pages/services/BusinessPage.jsx';
 
 function App() {
   return (
     <RTLProvider>
       <Router>
+        <ScrollToTop />
         <Layout>
           <Routes>
             <Route path="/" element={<HomePage />} />

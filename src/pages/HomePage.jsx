@@ -14,12 +14,14 @@ import {
   Stack,
   Chip,
   useTheme,
-  useMediaQuery
+  useMediaQuery,
+  IconButton
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
 import EventIcon from '@mui/icons-material/Event';
 import MoodIcon from '@mui/icons-material/Mood';
@@ -35,7 +37,6 @@ import { homeData, servicesData, contactData } from '../data/cmsData';
 import { placeholderImages } from '../utils/placeholder';
 import TestimonialCard from '../components/TestimonialCard';
 import { createServiceSlug } from '../utils/slugify';
-import transparentLogo from '../assets/images/לוגו עם סלוגן שקוף.png';
 import WhyChooseUs from '../components/WhyChooseUs';
 import CallToAction from '../components/CallToAction';
 
@@ -43,10 +44,11 @@ import CallToAction from '../components/CallToAction';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-// Import available images for service cards
-import weddingImg from '../assets/images/pexels-minan1398-752842.jpg';
-import barmitzvahImg from '../assets/images/pexels-pixabay-265722.jpg';
-import hennaImg from '../assets/images/pexels-emma-bauso-1183828-2253870.jpg';
+// Define image paths directly
+const transparentLogo = './assets/logo-with-slogan-transparent.png';
+const weddingImg = './images/services/wedding.jpg';
+const barmitzvahImg = './images/services/barmitzvah.jpg';
+const hennaImg = './images/services/henna.jpg';
 
 // Create motion components
 const MotionBox = motion(Box);
@@ -146,7 +148,23 @@ const HomePage = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isMedium = useMediaQuery(theme.breakpoints.down('md'));
   const [animationsLoaded, setAnimationsLoaded] = useState(false);
+  const [imageIndex, setImageIndex] = useState(0);
   
+  // Create an array of images for gallery
+  const imageGallery = [
+    weddingImg,
+    barmitzvahImg,
+    hennaImg
+  ];
+
+  const changeImage = (direction) => {
+    if (direction === 'next') {
+      setImageIndex((prev) => (prev === imageGallery.length - 1 ? 0 : prev + 1));
+    } else {
+      setImageIndex((prev) => (prev === 0 ? imageGallery.length - 1 : prev - 1));
+    }
+  };
+
   // Animation controls for scroll-triggered animations
   const controls = useAnimation();
   const [ref, inView] = useInView({
@@ -267,70 +285,63 @@ const HomePage = () => {
   ];
 
   return (
-    <Box sx={{ willChange: 'transform' }}>
-      {/* Hero Section */}
+    <Box sx={{ overflow: 'hidden' }}>
+      {/* Hero Banner with Image Gallery */}
       <MotionBox
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
         sx={{
           position: 'relative',
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6)), url(${weddingImg})`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6)), url(${imageGallery[imageIndex]})`,
           backgroundPosition: 'center',
           backgroundSize: 'cover',
           backgroundAttachment: 'fixed',
-          height: { xs: '95vh', md: '85vh' },
+          height: { xs: '70vh', md: '80vh' },
           display: 'flex',
           alignItems: 'center',
           color: 'white',
           textAlign: 'center',
-          overflow: 'hidden',
-          willChange: 'transform'
+          overflow: 'hidden'
         }}
       >
-        {/* Reduce number of animated particles for better performance */}
-        {animationsLoaded && [...Array(8)].map((_, index) => (
-          <MotionBox
-            key={index}
-            sx={{
-              position: 'absolute',
-              width: Math.random() * 12 + 5,
-              height: Math.random() * 12 + 5,
-              borderRadius: '50%',
-              background: `rgba(255, 255, 255, ${Math.random() * 0.3 + 0.1})`,
-              zIndex: 1,
-              willChange: 'transform, opacity',
-              transform: 'translateZ(0)' // Force hardware acceleration
-            }}
-            animate={{
-              x: [
-                Math.random() * window.innerWidth * 0.8,
-                Math.random() * window.innerWidth * 0.8
-              ],
-              y: [
-                Math.random() * window.innerHeight * 0.7,
-                Math.random() * window.innerHeight * 0.7
-              ],
-              opacity: [0.2, 0.6, 0.2]
-            }}
-            transition={{
-              duration: Math.random() * 35 + 15,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          />
-        ))}
-
-        {/* Add confetti around empty spaces */}
-        <ConfettiGroup area="top-left" count={15} colors={confettiColors} />
-        <ConfettiGroup area="top-right" count={12} colors={confettiColors} />
-        <ConfettiGroup area="bottom-left" count={10} colors={confettiColors} />
-        <ConfettiGroup area="bottom-right" count={15} colors={confettiColors} />
-
-        <MotionContainer 
-          maxWidth="md"
-          initial={false}
-          animate={animationsLoaded ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 0.4 }}
-          sx={{ willChange: 'transform', transform: 'translateZ(0)' }}
+        {/* Image navigation controls */}
+        <IconButton 
+          sx={{ 
+            position: 'absolute', 
+            left: 20, 
+            top: '50%', 
+            transform: 'translateY(-50%)',
+            color: 'white',
+            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            },
+            zIndex: 2
+          }}
+          onClick={() => changeImage('prev')}
         >
+          <ArrowForwardIcon />
+        </IconButton>
+        <IconButton 
+          sx={{ 
+            position: 'absolute', 
+            right: 20, 
+            top: '50%', 
+            transform: 'translateY(-50%)',
+            color: 'white',
+            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            },
+            zIndex: 2
+          }}
+          onClick={() => changeImage('next')}
+        >
+          <ArrowBackIcon />
+        </IconButton>
+
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
           <MotionBox 
             sx={{ py: 4 }}
             variants={staggerContainer}
@@ -542,7 +553,7 @@ const HomePage = () => {
               </MotionButton>
             </MotionBox>
           </MotionBox>
-        </MotionContainer>
+        </Container>
       </MotionBox>
 
       {/* Services Section */}

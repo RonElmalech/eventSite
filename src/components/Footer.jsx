@@ -19,7 +19,6 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { Link as RouterLink } from 'react-router-dom';
-import logoImage from '../assets/images/לוגו עם סלוגן שקוף.png';
 import { getAllServices } from '../data/services';
 import { contactData } from '../data/cmsData';
 
@@ -27,6 +26,7 @@ const Footer = () => {
   const theme = useTheme();
   const services = getAllServices();
   const currentYear = new Date().getFullYear();
+  const logoImage = './assets/logo-with-slogan-transparent.png';
 
   // Fixed service path mapping to ensure correct routing
   const getServicePath = (service) => {
@@ -60,19 +60,17 @@ const Footer = () => {
             <Typography variant="h6" component="h3" gutterBottom fontWeight="bold">
               הקסם באירוע
             </Typography>
-            <Box 
-              component="img"
-              src={logoImage}
-              alt="הקסם באירוע"
-              sx={{ 
-                height: 100,
-                width: 'auto',
-                mb: 2,
-                padding: 1,
-                borderRadius: 1,
-                backgroundColor: 'white',
-              }}
-            />
+            <Box>
+              <Box component='img'
+                sx={{
+                  width: { xs: '90%', sm: '60%', md: '80%', lg: '70%' },
+                  maxWidth: '300px',
+                  height: 'auto'
+                }}
+                alt="לוגו המייג'יק של האירוע"
+                src={logoImage}
+              />
+            </Box>
             <Typography variant="body2" sx={{ mb: 2 }}>
               אנחנו מתמחים בהפקת אירועים מושלמים המותאמים אישית לצרכים והחלומות שלכם.
             </Typography>

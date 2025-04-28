@@ -16,13 +16,13 @@ import {
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
-import logoImage from '../assets/images/לוגו שקוף.png';
 import { createServiceSlug } from '../utils/slugify';
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const logoImage = './assets/logo-transparent.png';
 
   const navigationItems = [
     { name: 'בית', path: '/' },

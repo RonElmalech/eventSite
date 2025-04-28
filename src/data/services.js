@@ -61,12 +61,12 @@ const servicesData = [
       "פתרונות יצירתיים לכל אתגר",
       "ליווי צמוד מהרגע הראשון ועד סוף האירוע"
     ],
-    image: "/images/services/wedding.jpg",
+    image: "./images/services/wedding.jpg",
     galleryImages: [
-      "/images/gallery/wedding-1.jpg",
-      "/images/gallery/wedding-2.jpg",
-      "/images/gallery/wedding-3.jpg",
-      "/images/gallery/wedding-4.jpg"
+      "./images/gallery/wedding-1.jpg",
+      "./images/gallery/wedding-2.jpg",
+      "./images/gallery/wedding-3.jpg",
+      "./images/gallery/wedding-4.jpg"
     ],
     get slug() {
       return createServiceSlug(this.title);
@@ -118,12 +118,12 @@ const servicesData = [
       "גישה רגישה לצרכים המיוחדים של הנער",
       "יצירת חוויה משפחתית משמעותית"
     ],
-    image: "/images/services/barmitzvah.jpg",
+    image: "./images/services/barmitzvah.jpg",
     galleryImages: [
-      "/images/gallery/barmitzvah-1.jpg",
-      "/images/gallery/barmitzvah-2.jpg",
-      "/images/gallery/barmitzvah-3.jpg",
-      "/images/gallery/barmitzvah-4.jpg"
+      "./images/gallery/barmitzvah-1.jpg",
+      "./images/gallery/barmitzvah-2.jpg",
+      "./images/gallery/barmitzvah-3.jpg",
+      "./images/gallery/barmitzvah-4.jpg"
     ],
     get slug() {
       return createServiceSlug(this.title);
@@ -175,12 +175,12 @@ const servicesData = [
       "גישה רגישה לצרכים המיוחדים של הנערה",
       "יצירת חוויה משפחתית משמעותית"
     ],
-    image: "/images/services/barmitzvah.jpg",  // Reusing the same image for now
+    image: "./images/services/barmitzvah.jpg",
     galleryImages: [
-      "/images/gallery/barmitzvah-1.jpg",
-      "/images/gallery/barmitzvah-2.jpg",
-      "/images/gallery/barmitzvah-3.jpg",
-      "/images/gallery/barmitzvah-4.jpg"
+      "./images/gallery/barmitzvah-1.jpg",
+      "./images/gallery/barmitzvah-2.jpg",
+      "./images/gallery/barmitzvah-3.jpg",
+      "./images/gallery/barmitzvah-4.jpg"
     ],
     get slug() {
       return createServiceSlug(this.title);
@@ -232,12 +232,12 @@ const servicesData = [
       "קשרים עם אמני חינה מובילים",
       "יצירת אווירה אותנטית וחגיגית"
     ],
-    image: "/images/services/henna.jpg",
+    image: "./images/services/henna.jpg",
     galleryImages: [
-      "/images/gallery/henna-1.jpg",
-      "/images/gallery/henna-2.jpg",
-      "/images/gallery/henna-3.jpg",
-      "/images/gallery/henna-4.jpg"
+      "./images/gallery/henna-1.jpg",
+      "./images/gallery/henna-2.jpg",
+      "./images/gallery/henna-3.jpg",
+      "./images/gallery/henna-4.jpg"
     ],
     get slug() {
       return createServiceSlug(this.title);
@@ -289,12 +289,12 @@ const servicesData = [
       "איזון בין תכנון לבין גמישות",
       "חווית חגיגה נטולת דאגות למארחים"
     ],
-    image: "/images/services/birthday.jpg",
+    image: "./images/services/birthday.jpg",
     galleryImages: [
-      "/images/gallery/birthday-1.jpg",
-      "/images/gallery/birthday-2.jpg",
-      "/images/gallery/birthday-3.jpg",
-      "/images/gallery/birthday-4.jpg"
+      "./images/gallery/birthday-1.jpg",
+      "./images/gallery/birthday-2.jpg",
+      "./images/gallery/birthday-3.jpg",
+      "./images/gallery/birthday-4.jpg"
     ],
     get slug() {
       return createServiceSlug(this.title);
@@ -346,12 +346,12 @@ const servicesData = [
       "תשומת לב לצרכים המיוחדים של היולדת והתינוק",
       "ניהול רגיש ומכבד של האירוע"
     ],
-    image: "/images/services/brit.jpg",
+    image: "./images/services/brit.jpg",
     galleryImages: [
-      "/images/gallery/brit-1.jpg",
-      "/images/gallery/brit-2.jpg",
-      "/images/gallery/brit-3.jpg",
-      "/images/gallery/brit-4.jpg"
+      "./images/gallery/brit-1.jpg",
+      "./images/gallery/brit-2.jpg",
+      "./images/gallery/brit-3.jpg",
+      "./images/gallery/brit-4.jpg"
     ],
     get slug() {
       return createServiceSlug(this.title);
@@ -403,12 +403,12 @@ const servicesData = [
       "תשומת לב למיתוג ולמסרים",
       "מעקב אחר ROI והשגת מטרות האירוע"
     ],
-    image: "/images/services/business.jpg",
+    image: "./images/services/business.jpg",
     galleryImages: [
-      "/images/gallery/business-1.jpg",
-      "/images/gallery/business-2.jpg",
-      "/images/gallery/business-3.jpg",
-      "/images/gallery/business-4.jpg"
+      "./images/gallery/business-1.jpg",
+      "./images/gallery/business-2.jpg",
+      "./images/gallery/business-3.jpg",
+      "./images/gallery/business-4.jpg"
     ],
     get slug() {
       return createServiceSlug(this.title);

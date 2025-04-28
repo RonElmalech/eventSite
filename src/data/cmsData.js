@@ -18,19 +18,19 @@ export const homeData = {
       id: 1,
       title: "חתונות",
       description: "הפקת חתונות מושלמות עם תשומת לב לכל פרט",
-      imageUrl: "/images/wedding.jpg"
+      imageUrl: "./images/wedding.jpg"
     },
     {
       id: 2,
       title: "אירועים עסקיים",
       description: "כנסים, השקות מוצרים ואירועי חברה מקצועיים",
-      imageUrl: "/images/corporate.jpg"
+      imageUrl: "./images/corporate.jpg"
     },
     {
       id: 3,
       title: "ימי הולדת",
       description: "חגיגות ימי הולדת מיוחדות לכל גיל",
-      imageUrl: "/images/birthday.jpg"
+      imageUrl: "./images/birthday.jpg"
     }
   ],
   testimonials: [
@@ -40,7 +40,7 @@ export const homeData = {
       role: "חתונה",
       date: "מרץ 2023",
       quote: "האירוע היה מושלם! הצוות המקצועי והאדיב דאג לכל פרט ופרט, וכל האורחים לא מפסיקים להחמיא. תודה רבה!",
-      imageUrl: "/images/testimonials/1.jpg"
+      imageUrl: "./assets/testimonials/1.jpg"
     },
     {
       id: 2,
@@ -48,7 +48,7 @@ export const homeData = {
       role: "בר מצווה",
       date: "יוני 2023",
       quote: "הבר מצווה של הבן שלנו הייתה חוויה מדהימה! הקסם באירוע דאגו לכל הפרטים הקטנים והפכו את היום למושלם.",
-      imageUrl: "/images/testimonials/2.jpg"
+      imageUrl: "./assets/testimonials/2.jpg"
     },
     {
       id: 3,
@@ -56,7 +56,7 @@ export const homeData = {
       role: "אירוע חברה",
       date: "ספטמבר 2023",
       quote: "הפקתם לנו אירוע עסקי ברמה גבוהה ומקצועית. הכל התנהל בצורה חלקה ומושלמת. בהחלט נשתף פעולה שוב!",
-      imageUrl: "/images/testimonials/3.jpg"
+      imageUrl: "./assets/testimonials/3.jpg"
     }
   ]
 };
@@ -70,7 +70,7 @@ export const servicesData = {
       title: "חתונות",
       description: "הפקת חתונות מושלמות עם תשומת לב לכל פרט",
       shortDescription: "הפכו את היום המיוחד שלכם לבלתי נשכח עם שירותי חתונה המותאמים אישית",
-      imageUrl: "/images/services/wedding.jpg",
+      imageUrl: "./images/services/wedding.jpg",
       get slug() {
         return createServiceSlug(this.title);
       }
@@ -80,7 +80,7 @@ export const servicesData = {
       title: "אירועים עסקיים",
       description: "כנסים, השקות מוצרים ואירועי חברה מקצועיים",
       shortDescription: "אירועים עסקיים מקצועיים שמשאירים רושם ומשיגים את המטרות שלכם",
-      imageUrl: "/images/services/business.jpg",
+      imageUrl: "./images/services/business.jpg",
       get slug() {
         return createServiceSlug(this.title);
       }
@@ -90,7 +90,7 @@ export const servicesData = {
       title: "ימי הולדת",
       description: "חגיגות ימי הולדת מיוחדות לכל גיל",
       shortDescription: "הפקת ימי הולדת מיוחדים לכל גיל עם רעיונות יצירתיים",
-      imageUrl: "/images/services/birthday.jpg",
+      imageUrl: "./images/services/birthday.jpg",
       get slug() {
         return createServiceSlug(this.title);
       }
@@ -100,7 +100,7 @@ export const servicesData = {
       title: "בר/בת מצווה",
       description: "אירועי בר/בת מצווה מרשימים ובלתי נשכחים",
       shortDescription: "חגגו את הצעד המשמעותי הזה עם אירוע בר מצווה שישאיר חותם",
-      imageUrl: "/images/services/barmitzvah.jpg",
+      imageUrl: "./images/services/barmitzvah.jpg",
       get slug() {
         return createServiceSlug(this.title);
       }
@@ -110,7 +110,7 @@ export const servicesData = {
       title: "חינה",
       description: "טקסי חינה מסורתיים בשילוב עיצוב מודרני",
       shortDescription: "חגיגת חינה מסורתית עם טוויסט מודרני לחוויה בלתי נשכחת",
-      imageUrl: "/images/services/henna.jpg",
+      imageUrl: "./images/services/henna.jpg",
       get slug() {
         return createServiceSlug(this.title);
       }
@@ -120,7 +120,7 @@ export const servicesData = {
       title: "ברית",
       description: "אירועי ברית אינטימיים ומשמחים",
       shortDescription: "ברית מילה מסורתית ומכובדת עם כל הפרטים שחשובים לכם",
-      imageUrl: "/images/services/brit.jpg",
+      imageUrl: "./images/services/brit.jpg",
       get slug() {
         return createServiceSlug(this.title);
       }
