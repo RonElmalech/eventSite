@@ -150,13 +150,13 @@ const WhyChooseUs = () => {
       <MotionBox
         sx={{
           position: 'absolute',
-          width: '300px',
-          height: '300px',
+          width: { xs: '200px', sm: '300px' },
+          height: { xs: '200px', sm: '300px' },
           borderRadius: '50%',
-          background: `radial-gradient(circle, ${theme.palette.primary.light}22 0%, transparent 70%)`,
-          top: '-100px',
-          left: '-100px',
-          zIndex: 0
+          background: `radial-gradient(circle, ${theme.palette.primary.light}33 0%, transparent 70%)`,
+          top: '-50px',
+          left: '-50px',
+          zIndex: 1
         }}
         animate={{
           x: [0, 30, 0],
@@ -172,20 +172,88 @@ const WhyChooseUs = () => {
       <MotionBox
         sx={{
           position: 'absolute',
-          width: '400px',
-          height: '400px',
+          width: { xs: '200px', sm: '300px' },
+          height: { xs: '200px', sm: '300px' },
           borderRadius: '50%',
-          background: `radial-gradient(circle, ${theme.palette.secondary.light}22 0%, transparent 70%)`,
-          bottom: '-150px',
-          right: '-150px',
-          zIndex: 0
+          background: `radial-gradient(circle, ${theme.palette.secondary.light}33 0%, transparent 70%)`,
+          top: '-50px',
+          right: '-50px',
+          zIndex: 1
         }}
         animate={{
-          x: [0, -50, 0],
-          y: [0, -30, 0],
+          x: [0, -30, 0],
+          y: [0, 40, 0],
         }}
         transition={{
           duration: 18,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+
+      <MotionBox
+        sx={{
+          position: 'absolute',
+          width: { xs: '200px', sm: '300px' },
+          height: { xs: '200px', sm: '300px' },
+          borderRadius: '50%',
+          background: `radial-gradient(circle, ${theme.palette.primary.light}33 0%, transparent 70%)`,
+          bottom: '-50px',
+          left: '-50px',
+          zIndex: 1
+        }}
+        animate={{
+          x: [0, 30, 0],
+          y: [0, -40, 0],
+        }}
+        transition={{
+          duration: 22,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+
+      <MotionBox
+        sx={{
+          position: 'absolute',
+          width: { xs: '200px', sm: '300px' },
+          height: { xs: '200px', sm: '300px' },
+          borderRadius: '50%',
+          background: `radial-gradient(circle, ${theme.palette.secondary.light}33 0%, transparent 70%)`,
+          bottom: '-50px',
+          right: '-50px',
+          zIndex: 1
+        }}
+        animate={{
+          x: [0, -30, 0],
+          y: [0, -40, 0],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+
+      {/* Strategic center circle */}
+      <MotionBox
+        sx={{
+          position: 'absolute',
+          width: { xs: '300px', sm: '400px' },
+          height: { xs: '300px', sm: '400px' },
+          borderRadius: '50%',
+          background: `radial-gradient(circle, ${theme.palette.primary.light}33 0%, transparent 70%)`,
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 1
+        }}
+        animate={{
+          scale: [1, 1.1, 1],
+          opacity: [0.4, 0.6, 0.4],
+        }}
+        transition={{
+          duration: 15,
           repeat: Infinity,
           ease: "easeInOut"
         }}

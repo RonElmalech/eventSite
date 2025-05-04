@@ -19,6 +19,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { servicesData } from '../data/cmsData';
 import { getServiceImage } from '../utils/placeholder';
 import { Link as RouterLink } from 'react-router-dom';
+import EventPackages from '../components/EventPackages';
 
 const ServicesPage = () => {
   // Simulate data loading from CMS
@@ -130,6 +131,11 @@ const ServicesPage = () => {
           </Grid>
         ))}
       </Grid>
+
+      {/* Event Packages */}
+      <Box sx={{ mt: 8 }}>
+        <EventPackages />
+      </Box>
       
       {/* CTA */}
       <Box 

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Container, Box, Typography, CircularProgress } from '@mui/material';
 import ServicePage from '../../components/ServicePage';
 import CallToAction from '../../components/CallToAction';
-import ServicePackages from '../../components/ServicePackages';
 import { getServiceForRoute } from '../../utils/debugServices';
 
 const BusinessPage = () => {
@@ -48,12 +47,9 @@ const BusinessPage = () => {
     <Box>
       <ServicePage service={service} />
       
-      {/* Add Packages Section */}
-      <ServicePackages serviceName="אירועים עסקיים" />
-      
       {/* Add a custom CallToAction */}
       <CallToAction 
-        title="בואו נארגן לכם אירוע עסקי מקצועי ומרשים"
+        title="בואו נארגן לכם אירוע עסקי מקצועי"
         subtitle="צרו איתנו קשר היום ונהפוך את האירוע העסקי שלכם להצלחה"
         buttonText="לייעוץ חינם עכשיו"
         showWhatsApp={true}

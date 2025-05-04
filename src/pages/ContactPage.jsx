@@ -4,26 +4,18 @@ import {
   Typography, 
   Box, 
   Grid, 
-  TextField, 
-  Button, 
   Paper,
   Card,
   CardContent,
   Snackbar,
-  Alert,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Select,
-  alpha,
-  Stack,
-  useTheme
+  Alert
 } from '@mui/material';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { contactData, servicesData } from '../data/cmsData';
+import ContactForm from '../components/ContactForm.jsx';
 
 const ContactPage = () => {
   // Simulate data loading from CMS
@@ -31,20 +23,6 @@ const ContactPage = () => {
   const [loading, setLoading] = useState(true);
   const logoImage = './assets/logo-with-slogan.png';
   const heroBackground = './assets/gallery/wedding-1.jpg';
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    service: '',
-    message: ''
-  });
-  const [formErrors, setFormErrors] = useState({});
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    severity: 'success',
-    message: ''
-  });
 
   useEffect(() => {
     // This would be replaced with an actual API call in production
@@ -61,110 +39,6 @@ const ContactPage = () => {
 
     fetchData();
   }, []);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-    
-    // Clear error when field is edited
-    if (formErrors[name]) {
-      setFormErrors({
-        ...formErrors,
-        [name]: ''
-      });
-    }
-  };
-
-  const validateForm = () => {
-    const errors = {};
-    
-    if (!formData.firstName.trim()) {
-      errors.firstName = 'שדה חובה';
-    }
-    
-    if (!formData.lastName.trim()) {
-      errors.lastName = 'שדה חובה';
-    }
-    
-    if (!formData.email.trim()) {
-      errors.email = 'שדה חובה';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      errors.email = 'כתובת אימייל לא תקינה';
-    }
-    
-    if (!formData.phone.trim()) {
-      errors.phone = 'שדה חובה';
-    } else if (!/^0\d{8,9}$/.test(formData.phone.replace(/[-\s]/g, ''))) {
-      errors.phone = 'מספר טלפון לא תקין';
-    }
-    
-    return errors;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    const errors = validateForm();
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      return;
-    }
-    
-    // Simulate form submission
-    setTimeout(() => {
-      setSnackbar({
-        open: true,
-        severity: 'success',
-        message: 'הטופס נשלח בהצלחה! נחזור אליך בהקדם.'
-      });
-      
-      // Reset form
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        service: '',
-        message: ''
-      });
-    }, 500);
-    
-    // In a real app, you would submit the form data to your backend:
-    // 
-    // try {
-    //   const response = await fetch('/api/contact', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(formData),
-    //   });
-    //   const data = await response.json();
-    //   if (data.success) {
-    //     setSnackbar({
-    //       open: true,
-    //       severity: 'success',
-    //       message: 'הטופס נשלח בהצלחה! נחזור אליך בהקדם.'
-    //     });
-    //     // Reset form
-    //     setFormData({...});
-    //   } else {
-    //     throw new Error(data.message);
-    //   }
-    // } catch (error) {
-    //   setSnackbar({
-    //     open: true,
-    //     severity: 'error',
-    //     message: 'שגיאה בשליחת הטופס, אנא נסה שוב.'
-    //   });
-    //   console.error('Error submitting form:', error);
-    // }
-  };
-
-  const handleCloseSnackbar = () => {
-    setSnackbar({ ...snackbar, open: false });
-  };
 
   if (loading) {
     return (
@@ -228,169 +102,7 @@ const ContactPage = () => {
               <Typography variant="h4" component="h2" gutterBottom sx={{ color: 'secondary.main' }}>
                 טופס יצירת קשר
               </Typography>
-              
-              <form onSubmit={handleSubmit}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="שם פרטי"
-                      name="firstName"
-                      value={formData.firstName}
-                      onChange={handleChange}
-                      margin="normal"
-                      error={!!formErrors.firstName}
-                      helperText={formErrors.firstName}
-                      required
-                      sx={{
-                        '& .MuiOutlinedInput-root': {
-                          '&.Mui-focused fieldset': {
-                            borderColor: 'primary.main',
-                          },
-                        },
-                        '& label.Mui-focused': {
-                          color: 'primary.main',
-                        },
-                      }}
-                    />
-                  </Grid>
-                  
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="שם משפחה"
-                      name="lastName"
-                      value={formData.lastName}
-                      onChange={handleChange}
-                      margin="normal"
-                      error={!!formErrors.lastName}
-                      helperText={formErrors.lastName}
-                      required
-                      sx={{
-                        '& .MuiOutlinedInput-root': {
-                          '&.Mui-focused fieldset': {
-                            borderColor: 'primary.main',
-                          },
-                        },
-                        '& label.Mui-focused': {
-                          color: 'primary.main',
-                        },
-                      }}
-                    />
-                  </Grid>
-                  
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="אימייל"
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      margin="normal"
-                      error={!!formErrors.email}
-                      helperText={formErrors.email}
-                      required
-                      sx={{
-                        '& .MuiOutlinedInput-root': {
-                          '&.Mui-focused fieldset': {
-                            borderColor: 'primary.main',
-                          },
-                        },
-                        '& label.Mui-focused': {
-                          color: 'primary.main',
-                        },
-                      }}
-                    />
-                  </Grid>
-                  
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="טלפון"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      margin="normal"
-                      error={!!formErrors.phone}
-                      helperText={formErrors.phone}
-                      required
-                      sx={{
-                        '& .MuiOutlinedInput-root': {
-                          '&.Mui-focused fieldset': {
-                            borderColor: 'primary.main',
-                          },
-                        },
-                        '& label.Mui-focused': {
-                          color: 'primary.main',
-                        },
-                      }}
-                    />
-                  </Grid>
-                  
-                  <Grid item xs={12}>
-                    <FormControl fullWidth margin="normal">
-                      <InputLabel>שירות מבוקש</InputLabel>
-                      <Select
-                        name="service"
-                        value={formData.service}
-                        onChange={handleChange}
-                        label="שירות מבוקש"
-                        sx={{
-                          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'primary.main',
-                          },
-                        }}
-                      >
-                        <MenuItem value="">
-                          <em>בחר שירות</em>
-                        </MenuItem>
-                        {data.services.map((service) => (
-                          <MenuItem key={service.id} value={service.id}>
-                            {service.title}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                  
-                  <Grid item xs={12}>
-                    <TextField
-                      fullWidth
-                      label="הודעה"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      margin="normal"
-                      multiline
-                      rows={4}
-                      sx={{
-                        '& .MuiOutlinedInput-root': {
-                          '&.Mui-focused fieldset': {
-                            borderColor: 'primary.main',
-                          },
-                        },
-                        '& label.Mui-focused': {
-                          color: 'primary.main',
-                        },
-                      }}
-                    />
-                  </Grid>
-                  
-                  <Grid item xs={12}>
-                    <Button 
-                      type="submit" 
-                      variant="contained" 
-                      color="secondary" 
-                      size="large" 
-                      fullWidth
-                      sx={{ mt: 2, py: 1.5 }}
-                    >
-                      שלח
-                    </Button>
-                  </Grid>
-                </Grid>
-              </form>
+              <ContactForm />
             </Paper>
           </Grid>
 
@@ -481,25 +193,6 @@ const ContactPage = () => {
             </Card>
           </Grid>
         </Grid>
-        
-        {/* Snackbar for form submission feedback */}
-        <Snackbar
-          open={snackbar.open}
-          autoHideDuration={6000}
-          onClose={handleCloseSnackbar}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        >
-          <Alert 
-            onClose={handleCloseSnackbar} 
-            severity={snackbar.severity}
-            sx={{
-              backgroundColor: snackbar.severity === 'success' ? 'secondary.main' : 'error.main',
-              color: 'white'
-            }}
-          >
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
       </Container>
     </Box>
   );

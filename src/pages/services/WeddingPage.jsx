@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Container, Box, Typography, CircularProgress } from '@mui/material';
 import ServicePage from '../../components/ServicePage';
 import CallToAction from '../../components/CallToAction';
-import ServicePackages from '../../components/ServicePackages';
 import { getServiceForRoute } from '../../utils/debugServices';
 
 const WeddingPage = () => {
@@ -47,9 +46,6 @@ const WeddingPage = () => {
   return (
     <Box>
       <ServicePage service={service} />
-      
-      {/* Add Packages Section */}
-      <ServicePackages serviceName="חתונה" />
       
       {/* Add a custom CallToAction */}
       <CallToAction 

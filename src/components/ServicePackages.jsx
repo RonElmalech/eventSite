@@ -17,47 +17,40 @@ import {
   Paper,
   Container,
   useTheme,
-  useMediaQuery
+  useMediaQuery,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Chip
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import BuildIcon from '@mui/icons-material/Build';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { eventPackages } from '../data/eventPackages';
 
-// Predefined packages for all services
-const packageData = {
-  basic: {
-    name: "חבילה בסיסית",
-    price: 4000,
-    features: [
-      "תכנון וליווי אישי",
-      "DJ לכל האירוע",
-      "צלם סטילס",
-      "עמדת צילום בסיסית"
-    ]
-  },
-  premium: {
-    name: "חבילה פרימיום",
-    price: 6250,
-    features: [
-      "כל מה שבחבילה הבסיסית",
-      "צלם וידאו",
-      "צלם מגנטים",
-      "קיר צילום מעוצב",
-      "שולחן ממתקים"
-    ]
-  },
-  allInclusive: {
-    name: "חבילה הכל כלול",
-    price: 10000,
-    features: [
-      "כל מה שבחבילה הפרימיום",
-      "מתופפים לקבלת פנים",
-      "הסעות (עד 50 ק״מ)",
-      "נגן בוזוקי לקבלת פנים",
-      "אמן חושים"
-    ]
-  }
+// Add-ons price mapping
+const ADDONS_PRICES = {
+  'DJ': 'החל מ-1,500 ש"ח',
+  'מתופפים עם שופרות': '1,100 ש"ח',
+  'זוהרים לרחבה': '350 ש"ח',
+  'עמדת צילום (במקום מגנטים)': '1,100 ש"ח',
+  'מגנטים': '300 ש"ח',
+  'וידאו': '1,400 ש"ח',
+  'שדרוג לקיר פרימיום': '250 ש"ח',
+  'שדרוג איש צוות נוסף': '300 ש"ח',
+  'שולחנות משחק': '1,900 ש"ח',
+  'אמן חושים': 'מחיר בהתאמה אישית',
+  'סטנד אפ בהתאמה אישית מאת אייל נרדי': 'מחיר בהתאמה אישית',
+  'בלוני מספר': '450 ש"ח',
+  'עמדת בלונים': '1,000 ש"ח',
+  'הסעות': 'מחיר בהתאמה אישית'
+};
+
+const getPackagesForService = (serviceName) => {
+  // Return packages directly using Hebrew service name
+  return eventPackages[serviceName] || [];
 };
 
 // Available services for custom package
@@ -78,108 +71,296 @@ const availableServices = [
 
 const PackageCard = ({ packageInfo, isPopular, onSelect }) => {
   const theme = useTheme();
+  const [open, setOpen] = useState(false);
+  const [selectedAddons, setSelectedAddons] = useState([]);
+  
+  // Calculate original price
+  const originalPrice = packageInfo.price + packageInfo.savings;
+  
+  // Calculate total price including add-ons
+  const calculateTotalPrice = () => {
+    const addonsTotal = selectedAddons.reduce((total, addon) => {
+      const priceStr = ADDONS_PRICES[addon];
+      if (priceStr && priceStr !== 'מחיר בהתאמה אישית') {
+        // Extract all numbers from the price string and combine them
+        const numbers = priceStr.match(/\d+/g);
+        if (numbers && numbers.length > 0) {
+          // Combine all numbers to get the full price
+          const price = parseInt(numbers.join(''));
+          return total + price;
+        }
+      }
+      return total;
+    }, 0);
+    return packageInfo.price + addonsTotal;
+  };
+  
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedAddons([]);
+  };
+  
+  const handleAddonToggle = (addon) => {
+    setSelectedAddons(prev => 
+      prev.includes(addon) 
+        ? prev.filter(a => a !== addon)
+        : [...prev, addon]
+    );
+  };
+  
+  const handleSelect = () => {
+    // Create complete package info with selected add-ons
+    const completePackageInfo = {
+      ...packageInfo,
+      selectedAddons: selectedAddons,
+      originalPrice: originalPrice,
+      totalPrice: calculateTotalPrice()
+    };
+    onSelect(completePackageInfo);
+    handleClose();
+  };
   
   return (
-    <Card 
-      elevation={3}
-      sx={{ 
-        height: '100%', 
-        display: 'flex', 
-        flexDirection: 'column',
-        position: 'relative',
-        transition: 'all 0.3s ease',
-        '&:hover': {
-          transform: 'translateY(-10px)',
-          boxShadow: 10,
-          border: `2px solid ${theme.palette.primary.main}`,
-          '& .price-text': {
-            color: 'primary.main',
-            transform: 'scale(1.05)',
-          },
-          '& .package-title': {
-            color: 'primary.main',
+    <>
+      <Card 
+        elevation={3}
+        sx={{ 
+          height: '100%', 
+          display: 'flex', 
+          flexDirection: 'column',
+          position: 'relative',
+          transition: 'all 0.3s ease',
+          '&:hover': {
+            transform: 'translateY(-10px)',
+            boxShadow: 10,
+            border: `2px solid ${theme.palette.primary.main}`,
+            '& .price-text': {
+              color: 'primary.main',
+              transform: 'scale(1.05)',
+            },
+            '& .package-title': {
+              color: 'primary.main',
+            }
           }
-        }
-      }}
-    >
-      {isPopular && (
-        <Typography 
-          variant="subtitle1" 
-          sx={{ 
-            position: 'absolute',
-            top: 10,
-            left: 0,
-            right: 0,
-            textAlign: 'center',
-            color: theme.palette.primary.main,
-            fontWeight: 'bold',
-            fontSize: '1rem',
-            zIndex: 1
-          }}
-        >
-          ✓ החבילה הפופולרית ביותר
-        </Typography>
-      )}
-      
-      <CardContent sx={{ flexGrow: 1, p: 3, pt: isPopular ? 5 : 3 }}>
-        <Typography 
-          className="package-title"
-          variant="h5" 
-          component="h3" 
-          gutterBottom 
-          fontWeight="bold" 
-          align="center"
-          color="text.primary"
-          sx={{ transition: 'color 0.3s ease' }}
-        >
-          {packageInfo.name}
-        </Typography>
+        }}
+      >
+        {isPopular && (
+          <Typography 
+            variant="subtitle1" 
+            sx={{ 
+              position: 'absolute',
+              top: 10,
+              left: 0,
+              right: 0,
+              textAlign: 'center',
+              color: theme.palette.primary.main,
+              fontWeight: 'bold',
+              fontSize: '1rem',
+              zIndex: 1
+            }}
+          >
+            ✓ החבילה הפופולרית ביותר
+          </Typography>
+        )}
         
-        <Typography 
-          className="price-text"
-          variant="h4" 
-          component="div" 
-          align="center" 
-          color="text.primary" 
-          sx={{ 
-            mb: 3,
-            fontWeight: 'bold',
-            transition: 'all 0.3s ease'
-          }}
-        >
-          ₪{packageInfo.price.toLocaleString()}
-        </Typography>
+        <CardContent sx={{ flexGrow: 1, p: 3, pt: isPopular ? 5 : 3 }}>
+          <Typography 
+            className="package-title"
+            variant="h5" 
+            component="h3" 
+            gutterBottom 
+            fontWeight="bold" 
+            align="center"
+            color="text.primary"
+            sx={{ transition: 'color 0.3s ease' }}
+          >
+            {packageInfo.name}
+          </Typography>
+          
+          <Box sx={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center',
+            mb: 3
+          }}>
+            <Typography 
+              className="price-text"
+              variant="h4" 
+              component="div" 
+              align="center" 
+              color="text.primary" 
+              sx={{ 
+                fontWeight: 'bold',
+                transition: 'all 0.3s ease',
+                fontSize: { xs: '1.75rem', sm: '2rem' }
+              }}
+            >
+              ₪{packageInfo.price.toLocaleString()}
+            </Typography>
+            
+            <Typography 
+              variant="body1" 
+              color="text.secondary" 
+              align="center"
+              sx={{ 
+                textDecoration: 'line-through',
+                fontSize: { xs: '1rem', sm: '1.125rem' },
+                fontWeight: 'bold',
+                opacity: 0.8,
+                mt: 1
+              }}
+            >
+              במקום ₪{originalPrice.toLocaleString()}
+            </Typography>
+          </Box>
+          
+          <List disablePadding>
+            {packageInfo.features.map((feature, index) => (
+              <ListItem key={index} disablePadding sx={{ mb: 1 }}>
+                <ListItemIcon sx={{ minWidth: 30 }}>
+                  <CheckIcon color="primary" fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary={feature} />
+              </ListItem>
+            ))}
+          </List>
+        </CardContent>
         
-        <List disablePadding>
-          {packageInfo.features.map((feature, index) => (
-            <ListItem key={index} disablePadding sx={{ mb: 1 }}>
-              <ListItemIcon sx={{ minWidth: 30 }}>
-                <CheckIcon color="primary" fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary={feature} />
-            </ListItem>
-          ))}
-        </List>
-      </CardContent>
+        <CardActions sx={{ p: 2, pt: 0 }}>
+          <Button 
+            variant="contained" 
+            fullWidth 
+            color="primary"
+            size="large"
+            onClick={handleOpen}
+            sx={{ 
+              fontWeight: 'bold',
+              py: 1
+            }}
+          >
+            בחר חבילה זו
+          </Button>
+        </CardActions>
+      </Card>
       
-      <CardActions sx={{ p: 2, pt: 0 }}>
-        <Button 
-          variant="contained" 
-          fullWidth 
-          color="primary"
-          size="large"
-          component={RouterLink}
-          to={`/contact?package=${encodeURIComponent(packageInfo.name)}&price=${packageInfo.price}`}
-          onClick={() => onSelect(packageInfo)}
-          sx={{ 
-            fontWeight: 'bold',
-            py: 1
-          }}
-        >
-          בחר חבילה זו
-        </Button>
-      </CardActions>
-    </Card>
+      <Dialog 
+        open={open} 
+        onClose={handleClose}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography variant="h5" component="div" gutterBottom>
+              {packageInfo.name}
+            </Typography>
+            <Typography variant="subtitle1" color="primary">
+              מחיר בסיס: ₪{packageInfo.price.toLocaleString()}
+            </Typography>
+          </Box>
+        </DialogTitle>
+        
+        <DialogContent>
+          <Typography variant="h6" gutterBottom>
+            תוספות מומלצות:
+          </Typography>
+          
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mb: 3 }}>
+            {packageInfo.recommendedAddons.map((addon, index) => (
+              <Box 
+                key={index}
+                sx={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center',
+                  p: 2,
+                  border: '1px solid',
+                  borderColor: selectedAddons.includes(addon) ? 'primary.main' : 'divider',
+                  borderRadius: 1,
+                  cursor: 'pointer',
+                  bgcolor: selectedAddons.includes(addon) ? 'rgba(25, 118, 210, 0.08)' : 'background.paper',
+                  '&:hover': {
+                    bgcolor: 'action.hover'
+                  }
+                }}
+                onClick={() => handleAddonToggle(addon)}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <CheckIcon 
+                    color={selectedAddons.includes(addon) ? 'primary' : 'disabled'} 
+                    fontSize="small" 
+                  />
+                  <Typography variant="body1" fontWeight={selectedAddons.includes(addon) ? 'bold' : 'normal'}>
+                    {addon}
+                  </Typography>
+                </Box>
+                <Typography variant="body1" color="primary" fontWeight="bold">
+                  {ADDONS_PRICES[addon] || 'מחיר בהתאמה אישית'}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+          
+          <Box sx={{ 
+            p: 2, 
+            bgcolor: 'background.paper', 
+            borderRadius: 1,
+            border: '1px solid',
+            borderColor: 'divider',
+            mb: 2
+          }}>
+            <Typography variant="h6" gutterBottom>
+              סיכום:
+            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+              <Typography variant="body1">מחיר בסיס:</Typography>
+              <Typography variant="body1" fontWeight="bold">₪{packageInfo.price.toLocaleString()}</Typography>
+            </Box>
+            {selectedAddons.length > 0 && (
+              <Box sx={{ mb: 1 }}>
+                <Typography variant="body1" gutterBottom>תוספות:</Typography>
+                {selectedAddons.map((addon, index) => (
+                  <Box key={index} sx={{ display: 'flex', justifyContent: 'space-between', ml: 2 }}>
+                    <Typography variant="body2">{addon}</Typography>
+                    <Typography variant="body2" color="primary">
+                      {ADDONS_PRICES[addon] || 'מחיר בהתאמה אישית'}
+                    </Typography>
+                  </Box>
+                ))}
+              </Box>
+            )}
+            <Divider sx={{ my: 1 }} />
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Typography variant="h6">סה"כ:</Typography>
+              <Typography variant="h6" color="primary" fontWeight="bold">
+                ₪{calculateTotalPrice().toLocaleString()}
+              </Typography>
+            </Box>
+          </Box>
+          
+          <Typography variant="body2" color="text.secondary">
+            * התוספות הן אופציונליות וניתן להוסיף אותן בהמשך
+          </Typography>
+        </DialogContent>
+        
+        <DialogActions sx={{ p: 2 }}>
+          <Button onClick={handleClose} color="inherit">
+            ביטול
+          </Button>
+          <Button 
+            variant="contained" 
+            color="primary"
+            onClick={handleSelect}
+          >
+            המשך לטופס יצירת קשר
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 
@@ -272,26 +453,21 @@ const CustomPackageBuilder = ({ onSelect }) => {
       </Grid>
       
       <Box sx={{ mt: 4, textAlign: 'center' }}>
-        <Typography variant="h5" component="div" color="primary.main" sx={{ mb: 2 }}>
+        <Typography variant="h6" gutterBottom>
           סה"כ: ₪{totalPrice.toLocaleString()}
         </Typography>
         
-        <Button 
-          variant="contained" 
-          color="secondary"
+        <Button
+          variant="contained"
+          color="primary"
           size="large"
+          onClick={handleSelectCustomPackage}
           component={RouterLink}
           to={`/contact?package=custom&price=${totalPrice}${servicesParam}`}
-          onClick={handleSelectCustomPackage}
           disabled={totalPrice === 0}
-          startIcon={<BuildIcon />}
-          sx={{ 
-            fontWeight: 'bold',
-            py: 1.5,
-            px: 4
-          }}
+          sx={{ mt: 2 }}
         >
-          צור קשר לקבלת הצעת מחיר
+          בנה חבילה מותאמת אישית
         </Button>
       </Box>
     </Paper>
@@ -301,58 +477,82 @@ const CustomPackageBuilder = ({ onSelect }) => {
 const ServicePackages = ({ serviceName }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const packages = getPackagesForService(serviceName);
+  const navigate = useNavigate();
   
   const handlePackageSelect = (packageInfo) => {
-    // This could store selected package in localStorage or context
-    console.log('Selected package:', packageInfo);
-    // You could also implement analytics tracking here
+    // Calculate total price including add-ons
+    const calculateTotalPrice = () => {
+      const addonsTotal = (packageInfo.selectedAddons || []).reduce((total, addon) => {
+        const priceStr = ADDONS_PRICES[addon];
+        if (priceStr && priceStr !== 'מחיר בהתאמה אישית') {
+          // Extract all numbers from the price string and combine them
+          const numbers = priceStr.match(/\d+/g);
+          if (numbers && numbers.length > 0) {
+            // Combine all numbers to get the full price
+            const price = parseInt(numbers.join(''));
+            return total + price;
+          }
+        }
+        return total;
+      }, 0);
+      return packageInfo.price + addonsTotal;
+    };
+
+    // Store complete package info in localStorage
+    const packageData = {
+      name: packageInfo.name,
+      price: packageInfo.price,
+      addons: packageInfo.selectedAddons || [],
+      addonsWithPrices: (packageInfo.selectedAddons || []).map(addon => ({
+        name: addon,
+        price: ADDONS_PRICES[addon] || 'מחיר בהתאמה אישית'
+      })),
+      service: serviceName,
+      features: packageInfo.features || [],
+      totalPrice: calculateTotalPrice()
+    };
+    
+    console.log('Package data:', packageData); // Debug log
+    
+    localStorage.setItem('selectedPackage', JSON.stringify(packageData));
+    
+    // Navigate to contact page
+    navigate('/contact');
   };
   
   return (
-    <Box component="section" sx={{ py: 8 }}>
+    <Box sx={{ py: 8, bgcolor: 'background.paper' }}>
       <Container maxWidth="lg">
-        <Typography variant="h4" component="h2" align="center" gutterBottom fontWeight="bold">
-          החבילות שלנו ל{serviceName}
-        </Typography>
-        
-        <Typography variant="subtitle1" align="center" color="text.secondary" paragraph sx={{ mb: 6 }}>
-          בחר את החבילה המתאימה לצרכים שלך או בנה חבילה מותאמת אישית
-        </Typography>
-        
-        {/* Predefined Packages */}
-        <Grid 
-          container 
-          spacing={4} 
+        <Typography 
+          variant="h3" 
+          component="h2" 
+          align="center" 
+          gutterBottom
           sx={{ 
-            mb: 8,
-            justifyContent: 'center'
+            fontWeight: 'bold',
+            mb: 6,
+            color: 'primary.main'
           }}
         >
-          <Grid item xs={12} md={4}>
-            <PackageCard 
-              packageInfo={packageData.basic} 
-              onSelect={handlePackageSelect} 
-            />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <PackageCard 
-              packageInfo={packageData.premium} 
-              isPopular={true}
-              onSelect={handlePackageSelect} 
-            />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <PackageCard 
-              packageInfo={packageData.allInclusive} 
-              onSelect={handlePackageSelect} 
-            />
-          </Grid>
+          חבילות {serviceName}
+        </Typography>
+        
+        <Grid container spacing={4}>
+          {packages.map((pkg, index) => (
+            <Grid item xs={12} md={4} key={index}>
+              <PackageCard 
+                packageInfo={pkg} 
+                isPopular={index === 1} // Mark the middle package as popular
+                onSelect={handlePackageSelect}
+              />
+            </Grid>
+          ))}
         </Grid>
         
-        <Divider sx={{ mb: 8 }} />
-        
-        {/* Custom Package Builder */}
-        <CustomPackageBuilder onSelect={handlePackageSelect} />
+        <Box sx={{ mt: 8 }}>
+          <CustomPackageBuilder onSelect={handlePackageSelect} />
+        </Box>
       </Container>
     </Box>
   );

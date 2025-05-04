@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Container, Box, Typography, CircularProgress } from '@mui/material';
 import ServicePage from '../../components/ServicePage';
 import CallToAction from '../../components/CallToAction';
-import ServicePackages from '../../components/ServicePackages';
 import { getServiceForRoute } from '../../utils/debugServices';
 
 const BarmitzvahPage = () => {
@@ -48,13 +47,10 @@ const BarmitzvahPage = () => {
     <Box>
       <ServicePage service={service} />
       
-      {/* Add Packages Section */}
-      <ServicePackages serviceName="בר מצווה" />
-      
       {/* Add a custom CallToAction */}
       <CallToAction 
         title="בואו נארגן לכם בר מצווה בלתי נשכח"
-        subtitle="צרו איתנו קשר היום ונהפוך את החלום שלכם למציאות"
+        subtitle="צרו איתנו קשר היום ונהפוך את האירוע שלכם למיוחד"
         buttonText="לייעוץ חינם עכשיו"
         showWhatsApp={true}
         showPhone={true}
