@@ -28,12 +28,9 @@ import WorkIcon from '@mui/icons-material/Work';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import MosqueIcon from '@mui/icons-material/Mosque';
 
-// Get base URL for assets
-const baseUrl = import.meta.env.MODE === 'production' ? '/TheMagicOfTheEvent' : '';
-
-// Define image paths with the base URL
-const transparentLogo = `${baseUrl}/assets/logo-with-slogan-transparent.png`;
-const weddingImg = `${baseUrl}/images/services/wedding.jpg`;
+// Define image paths directly
+const transparentLogo = './assets/logo-with-slogan-transparent.png';
+const weddingImg = './images/services/wedding.jpg';
 
 // Define services with their icons and paths
 const services = [
@@ -42,7 +39,7 @@ const services = [
     name: 'חתונות',
     description: 'הפכו את היום המיוחד שלכם לחוויה בלתי נשכחת עם כל השירותים במקום אחד',
     icon: <FavoriteIcon />,
-    image: `${baseUrl}/images/services/wedding.jpg`,
+    image: '/images/services/wedding.jpg',
     path: '/services/wedding'
   },
   {
@@ -50,7 +47,7 @@ const services = [
     name: 'בר מצווה',
     description: 'חגיגה מושלמת לציון אבן דרך משמעותית בחייו של הילד',
     icon: <GroupsIcon />,
-    image: `${baseUrl}/images/services/barmitzvah.jpg`,
+    image: '/images/services/barmitzvah.jpg',
     path: '/services/barmitzvah'
   },
   {
@@ -58,7 +55,7 @@ const services = [
     name: 'בת מצווה',
     description: 'אירוע מיוחד עם טאץ׳ אישי לציון הפיכתה של הילדה לנערה',
     icon: <CelebrationIcon />,
-    image: `${baseUrl}/images/services/barmitzvah.jpg`, // Using bar mitzvah image as placeholder
+    image: '/images/services/barmitzvah.jpg', // Using bar mitzvah image as placeholder
     path: '/services/batmitzvah'
   },
   {
@@ -66,7 +63,7 @@ const services = [
     name: 'ברית',
     description: 'אירוע משפחתי חם ומשמח לציון ברית המילה',
     icon: <ChildCareIcon />,
-    image: `${baseUrl}/images/services/brit.jpg`,
+    image: '/images/services/brit.jpg',
     path: '/services/brit'
   },
   {
@@ -74,7 +71,7 @@ const services = [
     name: 'חינה',
     description: 'שמרו על מסורת עם אירוע חינה צבעוני ועשיר בתרבות',
     icon: <MosqueIcon />,
-    image: `${baseUrl}/images/services/henna.jpg`,
+    image: '/images/services/henna.jpg',
     path: '/services/henna'
   },
   {
@@ -82,7 +79,7 @@ const services = [
     name: 'ימי הולדת',
     description: 'חגיגת יום הולדת מלאת שמחה והפתעות לכל גיל',
     icon: <CakeIcon />,
-    image: `${baseUrl}/images/services/birthday.jpg`,
+    image: '/images/services/birthday.jpg',
     path: '/services/birthday'
   },
   {
@@ -90,7 +87,7 @@ const services = [
     name: 'אירועים עסקיים',
     description: 'כנסים, ימי גיבוש ואירועי חברה ברמה מקצועית גבוהה',
     icon: <WorkIcon />,
-    image: `${baseUrl}/images/services/business.jpg`,
+    image: '/images/services/business.jpg',
     path: '/services/business'
   }
 ];

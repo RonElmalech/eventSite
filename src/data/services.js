@@ -61,12 +61,12 @@ const servicesData = [
       "פתרונות יצירתיים לכל אתגר",
       "ליווי צמוד מהרגע הראשון ועד סוף האירוע"
     ],
-    image: `${baseUrl}/images/services/wedding.jpg`,
+    image: "./images/services/wedding.jpg",
     galleryImages: [
-      `${baseUrl}/images/gallery/wedding-1.jpg`,
-      `${baseUrl}/images/gallery/wedding-2.jpg`,
-      `${baseUrl}/images/gallery/wedding-3.jpg`,
-      `${baseUrl}/images/gallery/wedding-4.jpg`
+      "./images/gallery/wedding-1.jpg",
+      "./images/gallery/wedding-2.jpg",
+      "./images/gallery/wedding-3.jpg",
+      "./images/gallery/wedding-4.jpg"
     ],
     get slug() {
       return createServiceSlug(this.title);
@@ -118,12 +118,12 @@ const servicesData = [
       "גישה רגישה לצרכים המיוחדים של הנער",
       "יצירת חוויה משפחתית משמעותית"
     ],
-    image: `${baseUrl}/images/services/barmitzvah.jpg`,
+    image: "./images/services/barmitzvah.jpg",
     galleryImages: [
-      `${baseUrl}/images/gallery/barmitzvah-1.jpg`,
-      `${baseUrl}/images/gallery/barmitzvah-2.jpg`,
-      `${baseUrl}/images/gallery/barmitzvah-3.jpg`,
-      `${baseUrl}/images/gallery/barmitzvah-4.jpg`
+      "./images/gallery/barmitzvah-1.jpg",
+      "./images/gallery/barmitzvah-2.jpg",
+      "./images/gallery/barmitzvah-3.jpg",
+      "./images/gallery/barmitzvah-4.jpg"
     ],
     get slug() {
       return createServiceSlug(this.title);
@@ -175,12 +175,12 @@ const servicesData = [
       "גישה רגישה לצרכים המיוחדים של הנערה",
       "יצירת חוויה משפחתית משמעותית"
     ],
-    image: `${baseUrl}/images/services/barmitzvah.jpg`,
+    image: "./images/services/barmitzvah.jpg",
     galleryImages: [
-      `${baseUrl}/images/gallery/barmitzvah-1.jpg`,
-      `${baseUrl}/images/gallery/barmitzvah-2.jpg`,
-      `${baseUrl}/images/gallery/barmitzvah-3.jpg`,
-      `${baseUrl}/images/gallery/barmitzvah-4.jpg`
+      "./images/gallery/barmitzvah-1.jpg",
+      "./images/gallery/barmitzvah-2.jpg",
+      "./images/gallery/barmitzvah-3.jpg",
+      "./images/gallery/barmitzvah-4.jpg"
     ],
     get slug() {
       return createServiceSlug(this.title);
@@ -232,12 +232,12 @@ const servicesData = [
       "קשרים עם אמני חינה מובילים",
       "יצירת אווירה אותנטית וחגיגית"
     ],
-    image: `${baseUrl}/images/services/henna.jpg`,
+    image: "./images/services/henna.jpg",
     galleryImages: [
-      `${baseUrl}/images/gallery/henna-1.jpg`,
-      `${baseUrl}/images/gallery/henna-2.jpg`,
-      `${baseUrl}/images/gallery/henna-3.jpg`,
-      `${baseUrl}/images/gallery/henna-4.jpg`
+      "./images/gallery/henna-1.jpg",
+      "./images/gallery/henna-2.jpg",
+      "./images/gallery/henna-3.jpg",
+      "./images/gallery/henna-4.jpg"
     ],
     get slug() {
       return createServiceSlug(this.title);
@@ -283,18 +283,18 @@ const servicesData = [
       }
     ],
     reasons: [
-      "ניסיון ביצירת אירועים לכל גיל",
-      "רעיונות ייחודיים שיתאימו לכל תקציב",
-      "שיתוף פעולה עם מגוון אמנים ואטרקציות",
-      "יכולת התאמה לכל נושא וסגנון",
-      "חוויית יום הולדת מרגשת וזכירה"
+      "יצירתיות ורעיונות חדשניים",
+      "התאמה מדויקת לגיל ולאופי החוגג/ת",
+      "תשומת לב לפרטים הקטנים",
+      "איזון בין תכנון לבין גמישות",
+      "חווית חגיגה נטולת דאגות למארחים"
     ],
-    image: `${baseUrl}/images/services/birthday.jpg`,
+    image: "./images/services/birthday.jpg",
     galleryImages: [
-      `${baseUrl}/images/gallery/birthday-1.jpg`,
-      `${baseUrl}/images/gallery/birthday-2.jpg`,
-      `${baseUrl}/images/gallery/birthday-3.jpg`,
-      `${baseUrl}/images/gallery/birthday-4.jpg`
+      "./images/gallery/birthday-1.jpg",
+      "./images/gallery/birthday-2.jpg",
+      "./images/gallery/birthday-3.jpg",
+      "./images/gallery/birthday-4.jpg"
     ],
     get slug() {
       return createServiceSlug(this.title);
@@ -340,18 +340,18 @@ const servicesData = [
       }
     ],
     reasons: [
-      "ניסיון בארגון אירועי ברית",
-      "הבנה עמוקה של הטקס והמסורת",
-      "רגישות לצרכי התינוק והמשפחה",
-      "תיאום מושלם בין המוהל וכלל הספקים",
-      "התחשבות בנוחות האורחים"
+      "כבוד למסורת ולמנהגים הדתיים",
+      "ניסיון בארגון אירועים בעלי אופי דתי",
+      "קשרים עם מוהלים מובילים",
+      "תשומת לב לצרכים המיוחדים של היולדת והתינוק",
+      "ניהול רגיש ומכבד של האירוע"
     ],
-    image: `${baseUrl}/images/services/brit.jpg`,
+    image: "./images/services/brit.jpg",
     galleryImages: [
-      `${baseUrl}/images/gallery/brit-1.jpg`,
-      `${baseUrl}/images/gallery/brit-2.jpg`,
-      `${baseUrl}/images/gallery/brit-3.jpg`,
-      `${baseUrl}/images/gallery/brit-4.jpg`
+      "./images/gallery/brit-1.jpg",
+      "./images/gallery/brit-2.jpg",
+      "./images/gallery/brit-3.jpg",
+      "./images/gallery/brit-4.jpg"
     ],
     get slug() {
       return createServiceSlug(this.title);
@@ -397,27 +397,24 @@ const servicesData = [
       }
     ],
     reasons: [
-      "ניסיון נרחב בהפקת אירועים עסקיים",
-      "הבנה של צרכי התדמית והמסר העסקי",
-      "פתרונות לוגיסטיים יעילים",
-      "תיאום עם מרצים ומנחים מקצועיים",
-      "תשומת לב לאפקטיביות וערך מוסף"
+      "הבנה עמוקה של צרכים עסקיים",
+      "מקצועיות וניסיון בתכנון אירועים מורכבים",
+      "יכולת שילוב תוכן ובידור באופן מאוזן",
+      "תשומת לב למיתוג ולמסרים",
+      "מעקב אחר ROI והשגת מטרות האירוע"
     ],
-    image: `${baseUrl}/images/services/business.jpg`,
+    image: "./images/services/business.jpg",
     galleryImages: [
-      `${baseUrl}/images/gallery/business-1.jpg`,
-      `${baseUrl}/images/gallery/business-2.jpg`,
-      `${baseUrl}/images/gallery/business-3.jpg`,
-      `${baseUrl}/images/gallery/business-4.jpg`
+      "./images/gallery/business-1.jpg",
+      "./images/gallery/business-2.jpg",
+      "./images/gallery/business-3.jpg",
+      "./images/gallery/business-4.jpg"
     ],
     get slug() {
       return createServiceSlug(this.title);
     }
   }
 ];
-
-// Get the base URL for assets based on environment
-const baseUrl = import.meta.env.MODE === 'production' ? '/TheMagicOfTheEvent' : '';
 
 /**
  * Get all services

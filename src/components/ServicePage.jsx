@@ -17,16 +17,13 @@ import TouchAppIcon from '@mui/icons-material/TouchApp';
 import { contactData } from '../data/cmsData';
 import ServicePackages from './ServicePackages';
 
-// Get base URL for assets
-const baseUrl = import.meta.env.MODE === 'production' ? '/TheMagicOfTheEvent' : '';
-
 // Define image paths correctly for public assets
-const weddingImg = `${baseUrl}/images/services/wedding.jpg`;
-const barmitzvahImg = `${baseUrl}/images/services/barmitzvah.jpg`;
-const hennaImg = `${baseUrl}/images/services/henna.jpg`;
-const britImg = `${baseUrl}/images/services/brit.jpg`;
-const birthdayImg = `${baseUrl}/images/services/birthday.jpg`;
-const businessImg = `${baseUrl}/images/services/business.jpg`;
+const weddingImg = '/images/services/wedding.jpg';
+const barmitzvahImg = '/images/services/barmitzvah.jpg';
+const hennaImg = '/images/services/henna.jpg';
+const britImg = '/images/services/brit.jpg';
+const birthdayImg = '/images/services/birthday.jpg';
+const businessImg = '/images/services/business.jpg';
 
 // Map of service slugs to actual images 
 const serviceImages = {
