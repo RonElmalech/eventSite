@@ -22,7 +22,7 @@ const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const logoImage = './assets/logo-transparent.png';
+  const logoImage = `${import.meta.env.BASE_URL}assets/logo-transparent.png`;
 
   const navigationItems = [
     { name: 'בית', path: '/' },

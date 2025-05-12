@@ -5,7 +5,7 @@ import { resolve } from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: './', // Always use relative paths
+  base: '/eventSite/', // Base path set to match GitHub Pages repository
   build: {
     outDir: 'dist',
     cssCodeSplit: false, // Ensure CSS is bundled together

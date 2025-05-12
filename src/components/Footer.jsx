@@ -26,7 +26,7 @@ const Footer = () => {
   const theme = useTheme();
   const services = getAllServices();
   const currentYear = new Date().getFullYear();
-  const logoImage = './assets/logo-with-slogan-transparent.png';
+  const logoImage = `${import.meta.env.BASE_URL}assets/logo-with-slogan-transparent.png`;
 
   // Fixed service path mapping to ensure correct routing
   const getServicePath = (service) => {
