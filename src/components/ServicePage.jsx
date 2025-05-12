@@ -18,12 +18,12 @@ import { contactData } from '../data/cmsData';
 import ServicePackages from './ServicePackages';
 
 // Define image paths correctly for public assets
-const weddingImg = '/images/services/wedding.jpg';
-const barmitzvahImg = '/images/services/barmitzvah.jpg';
-const hennaImg = '/images/services/henna.jpg';
-const britImg = '/images/services/brit.jpg';
-const birthdayImg = '/images/services/birthday.jpg';
-const businessImg = '/images/services/business.jpg';
+const weddingImg = './images/services/wedding.jpg';
+const barmitzvahImg = './images/services/barmitzvah.jpg';
+const hennaImg = './images/services/henna.jpg';
+const britImg = './images/services/brit.jpg';
+const birthdayImg = './images/services/birthday.jpg';
+const businessImg = './images/services/business.jpg';
 
 // Map of service slugs to actual images 
 const serviceImages = {

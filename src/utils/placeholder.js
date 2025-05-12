@@ -5,31 +5,31 @@
 export const placeholderImages = {
   // Service-specific placeholders
   service: {
-    wedding: '/images/services/wedding.jpg',
-    barmitzvah: '/images/services/barmitzvah.jpg',
-    henna: '/images/services/henna.jpg',
-    birthday: '/images/services/birthday.jpg',
-    brit: '/images/services/brit.jpg',
-    business: '/images/services/business.jpg',
+    wedding: './images/services/wedding.jpg',
+    barmitzvah: './images/services/barmitzvah.jpg',
+    henna: './images/services/henna.jpg',
+    birthday: './images/services/birthday.jpg',
+    brit: './images/services/brit.jpg',
+    business: './images/services/business.jpg',
   },
   // Content type placeholders
   content: {
-    eventGeneric: '/images/placeholders/event-generic.jpg',
-    eventHero: '/images/placeholders/event-hero.jpg',
-    venue: '/images/placeholders/venue.jpg',
-    food: '/images/placeholders/food.jpg',
-    decoration: '/images/placeholders/decoration.jpg',
-    music: '/images/placeholders/music.jpg',
-    team: '/images/placeholders/team.jpg',
-    about: '/images/placeholders/about.jpg',
+    eventGeneric: './images/placeholders/event-generic.jpg',
+    eventHero: './images/placeholders/event-hero.jpg',
+    venue: './images/placeholders/venue.jpg',
+    food: './images/placeholders/food.jpg',
+    decoration: './images/placeholders/decoration.jpg',
+    music: './images/placeholders/music.jpg',
+    team: './images/placeholders/team.jpg',
+    about: './images/placeholders/about.jpg',
   },
   // Event type placeholders
   eventType: {
-    private: '/images/placeholders/private.jpg',
-    festival: '/images/placeholders/festival.jpg',
+    private: './images/placeholders/private.jpg',
+    festival: './images/placeholders/festival.jpg',
   },
   // Default fallback image
-  default: '/images/placeholders/default.jpg'
+  default: './images/placeholders/default.jpg'
 };
 
 // Function to get an image URL for a specific service
