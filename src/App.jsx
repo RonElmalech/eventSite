@@ -21,7 +21,7 @@ import BusinessPage from './pages/services/BusinessPage.jsx';
 function App() {
   return (
     <RTLProvider>
-      <Router>
+      <Router basename="/eventSite">
         <ScrollToTop />
         <Layout>
           <Routes>
