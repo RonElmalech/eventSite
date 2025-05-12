@@ -5,7 +5,7 @@ import { resolve } from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: './', // Always use relative paths
+  base: process.env.NODE_ENV === 'production' ? '/TheMagicOfTheEvent/' : './', // Use repo name for GitHub Pages
   build: {
     outDir: 'dist',
     cssCodeSplit: false, // Ensure CSS is bundled together
