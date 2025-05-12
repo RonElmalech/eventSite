@@ -25,29 +25,6 @@
 .logo {
   height: 6em;
   padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
 }
 
 .card {
@@ -99,44 +76,19 @@
 .keyboard-navigation input:focus,
 .keyboard-navigation select:focus,
 .keyboard-navigation textarea:focus {
-  transform: scale(1.02) !important;
+  outline: var(--focus-outline-width) solid var(--focus-outline-color) !important;
+  outline-offset: 3px !important;
 }
 
 /* Ensure floating buttons are accessible */
 .MuiFab-root {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
-  transition: transform 0.3s ease !important;
-}
-
-.MuiFab-root:hover,
-.MuiFab-root:focus {
-  transform: scale(1.05) !important;
 }
 
 /* Accessibility panel styles */
 .accessibility-panel {
   border-radius: 12px !important;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2) !important;
-}
-
-/* Reduced motion styles */
-.reduce-motion * {
-  animation: none !important;
-  transition: none !important;
-  transform: none !important;
-}
-
-.reduce-motion .MuiFab-root:hover,
-.reduce-motion .MuiFab-root:focus {
-  transform: none !important;
-  background-color: var(--primary-color) !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.001ms !important;
-    transition-duration: 0.001ms !important;
-  }
 }
 
 /* Text direction styles */
@@ -158,17 +110,6 @@
   font-family: 'OpenDyslexic', sans-serif !important;
   line-height: 1.6 !important;
   letter-spacing: 0.5px !important;
-}
-
-/* Enhanced animation transition for UI elements */
-button, a, .MuiButton-root {
-  transition: all 0.3s ease;
-}
-
-.reduce-motion button,
-.reduce-motion a,
-.reduce-motion .MuiButton-root {
-  transition: none !important;
 }
 
 /* Adjust form controls for better accessibility */

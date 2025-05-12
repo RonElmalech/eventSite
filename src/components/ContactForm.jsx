@@ -22,8 +22,6 @@ import {
   Container,
   Divider,
   Badge,
-  Zoom,
-  Fade,
   Tooltip
 } from '@mui/material';
 import { useLocation } from 'react-router-dom';
@@ -230,6 +228,7 @@ export default function ContactForm() {
         type: 'error',
         message: 'אירעה שגיאה בעת שליחת הטופס. אנא נסו שנית או צרו קשר ישירות.'
       });
+      
     } finally {
       setIsSubmitting(false);
     }
@@ -252,24 +251,22 @@ export default function ContactForm() {
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
       {packageInfo ? (
-        <Fade in={true} timeout={800}>
-          <Box sx={{ mb: 6, textAlign: 'center' }}>
-            <Typography variant="h4" component="h1" gutterBottom sx={{ 
-              fontWeight: 'bold',
-              background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-              backgroundClip: 'text',
-              textFillColor: 'transparent',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}>
-              יש לך טעם מעולה! 
-              <CelebrationIcon sx={{ ml: 1, verticalAlign: 'middle' }} />
-            </Typography>
-            <Typography variant="h6" gutterBottom color="text.secondary" sx={{ fontStyle: 'italic' }}>
-              {funFact}
-            </Typography>
-          </Box>
-        </Fade>
+        <Box sx={{ mb: 6, textAlign: 'center' }}>
+          <Typography variant="h4" component="h1" gutterBottom sx={{ 
+            fontWeight: 'bold',
+            background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+            backgroundClip: 'text',
+            textFillColor: 'transparent',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}>
+            יש לך טעם מעולה! 
+            <CelebrationIcon sx={{ ml: 1, verticalAlign: 'middle' }} />
+          </Typography>
+          <Typography variant="h6" gutterBottom color="text.secondary" sx={{ fontStyle: 'italic' }}>
+            {funFact}
+          </Typography>
+        </Box>
       ) : (
         <Box sx={{ mb: 6, textAlign: 'center' }}>
           <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
@@ -285,196 +282,190 @@ export default function ContactForm() {
       <Grid container spacing={4}>
         {submitStatus && (
           <Grid item xs={12}>
-            <Zoom in={true}>
-              <Alert 
-                severity={submitStatus.type} 
-                sx={{ 
-                  mb: 4, 
-                  fontSize: '1.1rem',
-                  '& .MuiAlert-icon': {
-                    fontSize: '2rem'
-                  }
-                }}
-                onClose={() => setSubmitStatus(null)}
-              >
-                {submitStatus.message}
-              </Alert>
-            </Zoom>
+            <Alert 
+              severity={submitStatus.type} 
+              sx={{ 
+                mb: 4, 
+                fontSize: '1.1rem',
+                '& .MuiAlert-icon': {
+                  fontSize: '2rem'
+                }
+              }}
+              onClose={() => setSubmitStatus(null)}
+            >
+              {submitStatus.message}
+            </Alert>
           </Grid>
         )}
         
         {packageInfo && (
           <Grid item xs={12}>
-            <Zoom in={true}>
-              <Paper 
-                elevation={5} 
-                sx={{ 
-                  p: 3, 
-                  mb: 4, 
-                  border: '2px solid',
-                  borderColor: 'primary.main',
-                  bgcolor: 'rgba(0, 123, 255, 0.05)',
-                  position: 'relative',
-                  borderRadius: 2,
-                  overflow: 'hidden'
-                }}
-              >
-                <Box sx={{ 
-                  position: 'absolute', 
-                  top: 0, 
-                  right: 0, 
-                  bgcolor: 'primary.main',
-                  color: 'white',
-                  py: 0.5,
-                  px: 2,
-                  transform: 'rotate(45deg) translate(20%, -50%)',
-                  transformOrigin: 'top right',
-                  zIndex: 1,
-                  fontWeight: 'bold',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                }}>
-                  חבילה נבחרת
-                </Box>
-                
-                <Tooltip title="חזרה לבחירת חבילה">
-                  <IconButton
-                    onClick={handleClosePackage}
-                    sx={{
-                      position: 'absolute',
-                      top: 8,
-                      right: 8,
-                      color: 'primary.main',
-                      '&:hover': {
-                        color: 'secondary.main'
-                      },
-                      zIndex: 2
-                    }}
-                  >
-                    <CloseIcon />
-                  </IconButton>
-                </Tooltip>
-                
-                <Grid container spacing={3}>
-                  <Grid item xs={12} md={6}>
-                    <Box sx={{ mb: 3 }}>
-                      <Typography variant="h4" fontWeight="bold" gutterBottom color="primary">
-                        {packageInfo.name}
-                      </Typography>
-                      <Typography variant="h5" color="primary">
-                        מחיר בסיס: ₪{packageInfo.price?.toLocaleString() || '0'}
-                      </Typography>
-                    </Box>
-                    
-                    <Box sx={{ mt: 3 }}>
-                      <Typography variant="h6" fontWeight="bold" gutterBottom>
-                        למה החבילה הזו מעולה:
-                      </Typography>
-                      <List dense>
-                        <ListItem sx={{ pb: 1 }}>
-                          <ListItemIcon>
-                            <LocalOfferIcon color="primary" />
-                          </ListItemIcon>
-                          <ListItemText primary={
-                            <Typography>חיסכון משמעותי (וכסף לקניות בפרישמן 😉)</Typography>
-                          } />
-                        </ListItem>
-                        <ListItem sx={{ pb: 1 }}>
-                          <ListItemIcon>
-                            <EmojiEventsIcon color="primary" />
-                          </ListItemIcon>
-                          <ListItemText primary="חבילה שמותאמת בדיוק לצרכים שלך" />
-                        </ListItem>
-                        <ListItem sx={{ pb: 1 }}>
-                          <ListItemIcon>
-                            <CheckIcon color="primary" />
-                          </ListItemIcon>
-                          <ListItemText primary="שירות אישי וליווי צמוד" />
-                        </ListItem>
-                        <ListItem>
-                          <ListItemIcon>
-                            <SentimentSatisfiedAltIcon color="primary" />
-                          </ListItemIcon>
-                          <ListItemText primary="אנשים נחמדים שאוהבים את העבודה שלהם" />
-                        </ListItem>
-                      </List>
-                    </Box>
-                  </Grid>
+            <Paper 
+              elevation={5} 
+              sx={{ 
+                p: 3, 
+                mb: 4, 
+                border: '2px solid',
+                borderColor: 'primary.main',
+                bgcolor: 'rgba(0, 123, 255, 0.05)',
+                position: 'relative',
+                borderRadius: 2,
+                overflow: 'hidden'
+              }}
+            >
+              <Box sx={{ 
+                position: 'absolute', 
+                top: 0, 
+                right: 0, 
+                bgcolor: 'primary.main',
+                color: 'white',
+                py: 0.5,
+                px: 2,
+                zIndex: 1,
+                fontWeight: 'bold',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+              }}>
+                חבילה נבחרת
+              </Box>
+              
+              <Tooltip title="חזרה לבחירת חבילה">
+                <IconButton
+                  onClick={handleClosePackage}
+                  sx={{
+                    position: 'absolute',
+                    top: 8,
+                    right: 8,
+                    color: 'primary.main',
+                    '&:hover': {
+                      color: 'secondary.main'
+                    },
+                    zIndex: 2
+                  }}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </Tooltip>
+              
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <Box sx={{ mb: 3 }}>
+                    <Typography variant="h4" fontWeight="bold" gutterBottom color="primary">
+                      {packageInfo.name}
+                    </Typography>
+                    <Typography variant="h5" color="primary">
+                      מחיר בסיס: ₪{packageInfo.price?.toLocaleString() || '0'}
+                    </Typography>
+                  </Box>
                   
-                  {packageInfo.addons && packageInfo.addons.length > 0 && (
-                    <Grid item xs={12} md={6}>
-                      <Box>
-                        <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold' }}>
-                          תוספות שנבחרו:
-                        </Typography>
-                        <List dense>
-                          {packageInfo.addonsWithPrices?.map((addon, index) => (
-                            <ListItem 
-                              key={index} 
-                              sx={{ 
-                                py: 1.5,
-                                borderBottom: '1px solid',
-                                borderColor: 'divider',
-                                '&:last-child': {
-                                  borderBottom: 'none'
-                                }
-                              }}
-                            >
-                              <ListItemIcon sx={{ minWidth: 30 }}>
-                                <CheckIcon color="primary" fontSize="small" />
-                              </ListItemIcon>
-                              <ListItemText 
-                                primary={
-                                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <Typography variant="body1" component="span" fontWeight="medium">
-                                      {addon.name}
-                                    </Typography>
-                                    <Typography variant="body1" component="span" color="primary" fontWeight="bold">
-                                      {addon.price}
-                                    </Typography>
-                                  </Box>
-                                }
-                              />
-                            </ListItem>
-                          ))}
-                        </List>
-                        
-                        <Box sx={{ 
-                          mt: 3, 
-                          p: 2, 
-                          bgcolor: 'background.paper', 
-                          borderRadius: 1,
-                          border: '1px solid',
-                          borderColor: 'divider'
-                        }}>
-                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Typography variant="h6" fontWeight="bold">
-                              סה"כ:
-                            </Typography>
-                            <Typography variant="h5" color="primary" fontWeight="bold">
-                              ₪{packageInfo.totalPrice?.toLocaleString() || packageInfo.price?.toLocaleString()}
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </Box>
-                    </Grid>
-                  )}
+                  <Box sx={{ mt: 3 }}>
+                    <Typography variant="h6" fontWeight="bold" gutterBottom>
+                      למה החבילה הזו מעולה:
+                    </Typography>
+                    <List dense>
+                      <ListItem sx={{ pb: 1 }}>
+                        <ListItemIcon>
+                          <LocalOfferIcon color="primary" />
+                        </ListItemIcon>
+                        <ListItemText primary={
+                          <Typography>חיסכון משמעותי (וכסף לקניות בפרישמן 😉)</Typography>
+                        } />
+                      </ListItem>
+                      <ListItem sx={{ pb: 1 }}>
+                        <ListItemIcon>
+                          <EmojiEventsIcon color="primary" />
+                        </ListItemIcon>
+                        <ListItemText primary="חבילה שמותאמת בדיוק לצרכים שלך" />
+                      </ListItem>
+                      <ListItem sx={{ pb: 1 }}>
+                        <ListItemIcon>
+                          <CheckIcon color="primary" />
+                        </ListItemIcon>
+                        <ListItemText primary="שירות אישי וליווי צמוד" />
+                      </ListItem>
+                      <ListItem>
+                        <ListItemIcon>
+                          <SentimentSatisfiedAltIcon color="primary" />
+                        </ListItemIcon>
+                        <ListItemText primary="אנשים נחמדים שאוהבים את העבודה שלהם" />
+                      </ListItem>
+                    </List>
+                  </Box>
                 </Grid>
                 
-                <Box sx={{ 
-                  mt: 3, 
-                  p: 2, 
-                  bgcolor: 'primary.light', 
-                  borderRadius: 1,
-                  border: '1px solid',
-                  borderColor: 'primary.main',
-                  textAlign: 'center'
-                }}>
-                  <Typography variant="body1" fontWeight="medium">
-                    מלאו את הפרטים וניצור איתכם קשר לסגירת הפרטים האחרונים
-                  </Typography>
-                </Box>
-              </Paper>
-            </Zoom>
+                {packageInfo.addons && packageInfo.addons.length > 0 && (
+                  <Grid item xs={12} md={6}>
+                    <Box>
+                      <Typography variant="h5" sx={{ mb: 2, fontWeight: 'bold' }}>
+                        תוספות שנבחרו:
+                      </Typography>
+                      <List dense>
+                        {packageInfo.addonsWithPrices?.map((addon, index) => (
+                          <ListItem 
+                            key={index} 
+                            sx={{ 
+                              py: 1.5,
+                              borderBottom: '1px solid',
+                              borderColor: 'divider',
+                              '&:last-child': {
+                                borderBottom: 'none'
+                              }
+                            }}
+                          >
+                            <ListItemIcon sx={{ minWidth: 30 }}>
+                              <CheckIcon color="primary" fontSize="small" />
+                            </ListItemIcon>
+                            <ListItemText 
+                              primary={
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <Typography variant="body1" component="span" fontWeight="medium">
+                                    {addon.name}
+                                  </Typography>
+                                  <Typography variant="body1" component="span" color="primary" fontWeight="bold">
+                                    {addon.price}
+                                  </Typography>
+                                </Box>
+                              }
+                            />
+                          </ListItem>
+                        ))}
+                      </List>
+                      
+                      <Box sx={{ 
+                        mt: 3, 
+                        p: 2, 
+                        bgcolor: 'background.paper', 
+                        borderRadius: 1,
+                        border: '1px solid',
+                        borderColor: 'divider'
+                      }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <Typography variant="h6" fontWeight="bold">
+                            סה"כ:
+                          </Typography>
+                          <Typography variant="h5" color="primary" fontWeight="bold">
+                            ₪{packageInfo.totalPrice?.toLocaleString() || packageInfo.price?.toLocaleString()}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Grid>
+                )}
+              </Grid>
+              
+              <Box sx={{ 
+                mt: 3, 
+                p: 2, 
+                bgcolor: 'primary.light', 
+                borderRadius: 1,
+                border: '1px solid',
+                borderColor: 'primary.main',
+                textAlign: 'center'
+              }}>
+                <Typography variant="body1" fontWeight="medium">
+                  מלאו את הפרטים וניצור איתכם קשר לסגירת הפרטים האחרונים
+                </Typography>
+              </Box>
+            </Paper>
           </Grid>
         )}
         

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React from 'react';
 import { 
   Box, 
   Container, 
@@ -12,732 +12,888 @@ import {
   useMediaQuery,
   Divider,
   Avatar,
-  IconButton,
-  Tooltip,
-  Fab
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import EventNoteIcon from '@mui/icons-material/EventNote';
+import CheckIcon from '@mui/icons-material/Check';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import CelebrationIcon from '@mui/icons-material/Celebration';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-import CallIcon from '@mui/icons-material/Call';
-import { contactData } from '../data/cmsData';
+import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
+import PersonIcon from '@mui/icons-material/Person';
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+import VerifiedIcon from '@mui/icons-material/Verified';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import StarIcon from '@mui/icons-material/Star';
 import { placeholderImages } from '../utils/placeholder';
-
-// Wrap MUI components with motion
-const MotionBox = motion(Box);
-const MotionPaper = motion(Paper);
-const MotionTypography = motion(Typography);
-const MotionButton = motion(Button);
-const MotionContainer = motion(Container);
-const MotionAvatar = motion(Avatar);
-const MotionFab = motion(Fab);
-const MotionIconButton = motion(IconButton);
-const MotionDivider = motion(Divider);
-const MotionCard = motion(Card);
 
 const HowItWorksPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
-  const [activeStepIndices, setActiveStepIndices] = useState([]);
-  const timelineRef = useRef(null);
-  const heroRef = useRef(null);
-  const stepRefs = useRef([]);
 
-  // Scroll progress animation
-  const { scrollYProgress } = useScroll();
-  const timelineProgress = useTransform(scrollYProgress, [0, 0.9], [0, 1]);
-
-  // Steps data
-  const steps = [
+  // Our values
+  const values = [
     {
-      id: 1,
-      title: "חזון",
-      subtitle: "הפכו את החלום למציאות",
-      description: "הפגישה הראשונית היא המקום שבו אנו מקשיבים לחלומות שלכם, מבינים את הצרכים הייחודיים, ומתחילים לרקום את החזון המושלם לאירוע שלכם. עם הצוות המקצועי והמנוסה שלנו, נעצב יחד תוכנית מפורטת שממזגת את סגנונכם האישי עם הניסיון והידע שלנו.",
-      icon: <EventNoteIcon sx={{ fontSize: 40, color: '#fff' }} />,
-      iconBg: theme.palette.primary.main,
-      benefits: [
-        "ייעוץ אישי ומקצועי ללא התחייבות",
-        "תכנון מותאם אישית לסגנון ולתקציב שלכם",
-        "גישה למאגר רעיונות והשראה לאירועים"
-      ],
-      image: placeholderImages.meetingImage || placeholderImages.eventHero,
-      longDescription: "בפגישה הראשונית אנו מקדישים זמן להבין את החזון שלכם לאירוע המושלם. צוות המומחים שלנו יקשיב לכל פרט, ילמד להכיר את הטעם וההעדפות שלכם, ויציג בפניכם אפשרויות מגוונות שיתאימו בדיוק לסגנון שלכם. אנו מאמינים שכל אירוע צריך לשקף את האישיות הייחודית של בעליו, ולכן ניתן דגש רב על התאמה אישית."
+      title: "יושרה",
+      description: "הכול שקוף, בלי אותיות קטנות. אנחנו אומרים את האמת, גם כשזה פחות נוח – כי אתם סומכים עלינו.",
+      icon: <VerifiedIcon />
     },
     {
-      id: 2,
-      title: "תכנון",
-      subtitle: "יצירת האסטרטגיה המושלמת",
-      description: "לאחר גיבוש החזון, צוות התכנון שלנו מתחיל לעבוד על כל הפרטים הקטנים והגדולים. אנו מתאמים ספקים מובילים, מעצבים תפריטים מרהיבים, ומתכננים את לוח הזמנים המדויק שיבטיח זרימה מושלמת ביום האירוע.",
-      icon: <TouchAppIcon sx={{ fontSize: 40, color: '#fff' }} />,
-      iconBg: theme.palette.secondary.main,
-      benefits: [
-        "תיאום ספקים איכותיים וחבילות במחירים מיוחדים",
-        "יצירת לוח זמנים מפורט ותוכנית עבודה",
-        "ליווי אישי לאורך כל תהליך התכנון"
-      ],
-      image: placeholderImages.planningImage || placeholderImages.eventHero,
-      longDescription: "שלב התכנון הוא המפתח להצלחת האירוע. הצוות המקצועי שלנו מטפל בכל פרט, מבחירת המקום המושלם, דרך תיאום ספקים איכותיים, ועד לתכנון מדויק של לוח הזמנים. אנו מתמחים ביצירת זרימה מושלמת שתאפשר לכם ולאורחיכם ליהנות מכל רגע. הניסיון העשיר שלנו מבטיח שנדע להתמודד עם כל אתגר ולהציע פתרונות יצירתיים שיהפכו את האירוע שלכם לחוויה בלתי נשכחת."
+      title: "אמינות",
+      description: "אנחנו עומדים מאחורי כל התחייבות – אם משהו לא עומד בציפיות, נבדוק, נתקן, ונחזיר עד 20% מעלות השירות במקרה הצורך.",
+      icon: <CheckIcon />
     },
     {
-      id: 3,
-      title: "ביצוע",
-      subtitle: "הוצאה לפועל של כל הפרטים",
-      description: "ביום האירוע עצמו, צוות מקצועי מלא יהיה נוכח בשטח לוודא שכל פרט מתבצע בדיוק כפי שתוכנן. מנהל האירוע האישי שלכם יהיה זמין לכל צורך, כך שתוכלו להתרכז בליהנות ולחגוג ללא דאגות.",
-      icon: <EmojiEventsIcon sx={{ fontSize: 40, color: '#fff' }} />,
-      iconBg: theme.palette.primary.dark,
-      benefits: [
-        "ניהול מקצועי ביום האירוע",
-        "צוות מיומן שדואג לכל פרט",
-        "גיבוי לכל מקרה וטיפול מיידי בכל אתגר"
-      ],
-      image: placeholderImages.executionImage || placeholderImages.eventHero,
-      longDescription: "ביום האירוע, הצוות המקצועי שלנו מגיע מוקדם לוודא שהכל מוכן ומסודר לפי התוכנית. מנהל האירוע האישי שלכם יהיה צמוד אליכם לאורך כל האירוע, ידאג שלוח הזמנים נשמר ויטפל בכל פרט קטן. צוות מיומן יעבוד מאחורי הקלעים כדי להבטיח שהכל מתנהל בצורה חלקה, כך שאתם והאורחים שלכם תוכלו להתמקד בחגיגה ובשמחה."
+      title: "מחירים הוגנים",
+      description: "לא תשלמו יותר בגלל חוסר ידע או חוסר ניסיון – אנחנו יודעים בדיוק כמה כל דבר צריך לעלות, ומוודאים שאתם מקבלים תמורה מלאה לכל שקל.",
+      icon: <LocalOfferIcon />
     },
     {
-      id: 4,
-      title: "חגיגה",
-      subtitle: "רגעים בלתי נשכחים",
-      description: "זה הרגע שאליו חיכיתם - הזמן ליהנות, לחגוג וליצור זכרונות מיוחדים עם האנשים היקרים לכם. אנו דואגים שכל רגע יהיה מושלם, שכל פרט יהיה מדויק, ושהאווירה תהיה בדיוק כפי שדמיינתם.",
-      icon: <CelebrationIcon sx={{ fontSize: 40, color: '#fff' }} />,
-      iconBg: theme.palette.secondary.dark,
-      benefits: [
-        "חוויה מושלמת ללא דאגות",
-        "זכרונות שיישארו איתכם לנצח",
-        "אירוע ייחודי שישקף את האישיות שלכם"
-      ],
-      image: placeholderImages.celebrationImage || placeholderImages.eventHero,
-      longDescription: "זהו השיא של כל התכנון והעבודה - הרגע שבו אתם חוגגים עם האנשים היקרים לכם. אנו דואגים שכל פרט יהיה מושלם, מהקבלת פנים חמה, דרך ארוחה מרהיבה, ועד לסיום מרגש. הניסיון שלנו מבטיח שהאווירה תהיה בדיוק כפי שדמיינתם, והזכרונות שתיצרו ילוו אתכם לאורך שנים רבות."
+      title: "איכות",
+      description: "כל הספקים שלנו נבחרו בקפידה מתוך ניסיון אישי והמלצות מוכחות. אין פשרות על איכות – גם כשזה חוסך לכם כסף.",
+      icon: <StarIcon />
     }
   ];
 
-  // Scroll to next section
-  const scrollToTimeline = () => {
-    timelineRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  // Scroll to top
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  // Animation variants
-  const fadeIn = {
-    hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1,
-      transition: { duration: 0.8 }
-    }
-  };
-
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { 
-        type: "spring", 
-        stiffness: 100,
-        damping: 10 
-      }
-    }
-  };
-
-  const fadeInRight = {
-    hidden: { opacity: 0, x: -50 },
-    visible: { 
-      opacity: 1, 
-      x: 0,
-      transition: { 
-        type: "spring", 
-        stiffness: 100,
-        damping: 10 
-      }
-    }
-  };
-
-  const fadeInLeft = {
-    hidden: { opacity: 0, x: 50 },
-    visible: { 
-      opacity: 1, 
-      x: 0,
-      transition: { 
-        type: "spring", 
-        stiffness: 100,
-        damping: 10 
-      }
-    }
-  };
-
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1,
-      transition: { 
-        staggerChildren: 0.2,
-        delayChildren: 0.3
-      } 
-    }
-  };
-
-  const timelineVariants = {
-    hidden: { opacity: 0, scaleY: 0, originY: 0 },
-    visible: { 
-      opacity: 1, 
-      scaleY: 1,
-      transition: { 
-        duration: 1.5,
-        ease: "easeInOut"
-      }
-    }
-  };
-
-  const iconVariants = {
-    hidden: { scale: 0, opacity: 0 },
-    visible: { 
-      scale: 1, 
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 260,
-        damping: 20
-      }
+  // How it works steps
+  const steps = [
+    {
+      id: 1,
+      title: "יוצרים קשר בקלות",
+      description: "ניתן לפנות אלינו דרך האתר, טלפון או וואטסאפ. אנחנו כאן כדי להקשיב, להבין מה אתם צריכים, ולהתחיל לבנות איתכם את האירוע – בלי לחץ, בשיחה בגובה העיניים.",
+      icon: <PhoneInTalkIcon sx={{ fontSize: 40, color: '#fff' }} />,
+      iconBg: theme.palette.primary.main
     },
-    pulse: {
-      scale: [1, 1.05, 1],
-      boxShadow: [
-        "0px 0px 0px rgba(0,0,0,0.2)",
-        "0px 0px 15px rgba(0,0,0,0.4)",
-        "0px 0px 0px rgba(0,0,0,0.2)"
-      ],
-      transition: {
-        duration: 2,
-        repeat: Infinity,
-        repeatType: "loop"
-      }
+    {
+      id: 2,
+      title: "התאמה אישית של חבילה",
+      description: "בין אם מדובר בברית, בר/בת מצווה, חינה, יום הולדת או אירוע עסקי – אנחנו מרכיבים עבורכם חבילה מותאמת אישית הכוללת את כל בעלי המקצוע שתצטרכו, לפי סגנון, תקציב ואופי האירוע.",
+      icon: <PersonIcon sx={{ fontSize: 40, color: '#fff' }} />,
+      iconBg: theme.palette.secondary.main
+    },
+    {
+      id: 3,
+      title: "הצעת מחיר שקופה וסגירה",
+      description: "לאחר התאמה אישית, תקבלו הצעת מחיר מסודרת ושקופה הכוללת את כל השירותים שנבחרו. אתם תדעו בדיוק מה מקבלים, ממי, ובכמה.",
+      icon: <ReceiptIcon sx={{ fontSize: 40, color: '#fff' }} />,
+      iconBg: theme.palette.primary.dark
+    },
+    {
+      id: 4,
+      title: "ליווי מלא עד האירוע (ואחריו)",
+      description: "אנחנו נשארים אתכם לכל אורך הדרך – מתיאומים מול הספקים, דרך מעקב אחרי ההכנות, ועד בדיקה אחרי האירוע. כי כשיש מישהו שמנהל בשבילכם את הכול – אתם יכולים באמת ליהנות.",
+      icon: <SupportAgentIcon sx={{ fontSize: 40, color: '#fff' }} />,
+      iconBg: theme.palette.secondary.dark
     }
-  };
-
-  // This component will be used for each timeline step
-  const TimelineStep = ({ step, index, isLastStep }) => {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, amount: 0.5 });
-    const isEven = index % 2 === 0;
-    
-    // Update active steps based on visibility - with proper dependency array
-    useEffect(() => {
-      if (isInView) {
-        setActiveStepIndices(prev => {
-          if (!prev.includes(index)) {
-            return [...prev, index];
-          }
-          return prev;
-        });
-      }
-      // We're removing the cleanup function that removes indices
-      // This prevents constant toggling when elements are at viewport edge
-    }, [isInView, index]);
-    
-    // We'll use this to alternate between left and right placement
-    const contentPosition = isEven ? 'right' : 'left';
-    
-    useEffect(() => {
-      // Store the ref for each step
-      stepRefs.current[index] = ref;
-    }, [index]);
-
-    return (
-      <MotionBox 
-        ref={ref}
-        sx={{
-          position: 'relative',
-          my: 5,
-          display: 'flex',
-          flexDirection: isMobile ? 'column' : 'row',
-          alignItems: 'center'
-        }}
-      >
-        {/* Timeline line */}
-        {!isLastStep && (
-          <MotionBox
-            animate={isInView ? "visible" : "hidden"}
-            variants={timelineVariants}
-            initial="hidden"
-            sx={{
-              position: 'absolute',
-              top: '50%',
-              right: isMobile ? (isEven ? 'auto' : '50%') : '50%',
-              left: isMobile ? (isEven ? '50%' : 'auto') : 'auto',
-              width: 2,
-              height: isMobile ? 50 : 100,
-              bgcolor: 'primary.main',
-              zIndex: 1,
-              transform: isMobile ? 'translateY(100%)' : 'translateY(0)',
-              transformOrigin: 'top'
-            }}
-          />
-        )}
-
-        {/* Timeline dot/icon */}
-        <MotionBox
-          animate={isInView ? "pulse" : "hidden"}
-          variants={iconVariants}
-          initial="hidden"
-          sx={{
-            width: 80,
-            height: 80,
-            borderRadius: '50%',
-            bgcolor: step.iconBg,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: 3,
-            zIndex: 2,
-            mx: isMobile ? 'auto' : 0
-          }}
-        >
-          {step.icon}
-        </MotionBox>
-
-        {/* Content */}
-        <MotionBox
-          animate={isInView ? "visible" : "hidden"}
-          variants={isEven ? fadeInLeft : fadeInRight}
-          initial="hidden"
-          sx={{
-            flex: 1,
-            width: '100%',
-            maxWidth: isMobile ? '100%' : '500px',
-            mx: isMobile ? 'auto' : 0,
-            mt: isMobile ? 3 : 0,
-            ml: isMobile ? 0 : (contentPosition === 'right' ? 4 : 'auto'),
-            mr: isMobile ? 0 : (contentPosition === 'left' ? 4 : 'auto'),
-          }}
-        >
-          <MotionPaper
-            whileHover={{ 
-              scale: 1.02, 
-              boxShadow: '0px 8px 30px rgba(0, 0, 0, 0.12)' 
-            }}
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              bgcolor: isInView ? alpha(step.iconBg, 0.1) : 'background.paper',
-              border: isInView ? `1px solid ${step.iconBg}` : 'none',
-              boxShadow: isInView ? 4 : 2,
-              transition: 'all 0.3s ease'
-            }}
-          >
-            <MotionTypography 
-              variant="h5" 
-              component="h3" 
-              sx={{ 
-                mb: 1, 
-                color: step.iconBg,
-                fontWeight: 'bold'
-              }}
-            >
-              {step.title}
-            </MotionTypography>
-            
-            <MotionTypography 
-              variant="subtitle1" 
-              sx={{ 
-                mb: 2,
-                fontWeight: '500',
-                color: 'text.secondary'
-              }}
-            >
-              {step.subtitle}
-            </MotionTypography>
-            
-            <MotionDivider sx={{ my: 2 }} />
-            
-            <MotionTypography variant="body1" paragraph>
-              {step.description}
-            </MotionTypography>
-            
-            <Box component="ul" sx={{ pl: 2, mb: 0 }}>
-              {step.benefits.map((benefit, i) => (
-                <Box 
-                  component="li" 
-                  key={i}
-                  sx={{ 
-                    display: 'flex', 
-                    alignItems: 'center',
-                    mb: i < step.benefits.length - 1 ? 1 : 0 
-                  }}
-                >
-                  <CheckCircleOutlineIcon 
-                    color="secondary" 
-                    fontSize="small" 
-                    sx={{ mr: 1 }} 
-                  />
-                  <Typography variant="body2">
-                    {benefit}
-                  </Typography>
-                </Box>
-              ))}
-            </Box>
-          </MotionPaper>
-        </MotionBox>
-      </MotionBox>
-    );
-  };
-
-  // Function to generate alpha color with opacity
-  const alpha = (color, opacity) => {
-    // Convert hex to rgba or just return with opacity
-    if (color.startsWith('#')) {
-      const r = parseInt(color.slice(1, 3), 16);
-      const g = parseInt(color.slice(3, 5), 16);
-      const b = parseInt(color.slice(5, 7), 16);
-      return `rgba(${r}, ${g}, ${b}, ${opacity})`;
-    }
-    // For theme colors (primary.main etc), we can't easily convert
-    // So we return a semi-transparent version of white or black
-    return `rgba(255, 255, 255, ${opacity})`;
-  };
+  ];
 
   return (
-    <Box sx={{ overflow: 'hidden' }}>
-      {/* Hero Banner with Parallax Effect */}
-      <MotionBox
-        ref={heroRef}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
+    <Box>
+      {/* Hero Banner */}
+      <Box
         sx={{
           position: 'relative',
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url(${placeholderImages.eventHero})`,
+          backgroundImage: `linear-gradient(rgba(57, 84, 204, 0.8), rgba(247, 143, 70, 0.8)), url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1000&auto=format&fit=crop')`,
           backgroundPosition: 'center',
           backgroundSize: 'cover',
-          backgroundAttachment: 'fixed',
-          height: '100vh',
+          minHeight: '70vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           color: '#fff',
+          py: 8,
         }}
       >
-        <MotionContainer
-          variants={staggerContainer}
-          initial="hidden"
-          animate="visible"
-          sx={{
-            textAlign: 'center'
-          }}
-        >
-          <MotionTypography 
-            variants={fadeInUp}
+        <Container sx={{ textAlign: 'center' }}>
+          <Typography 
             component="h1"
             sx={{ 
               fontWeight: 'bold', 
               fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4.5rem' },
-              mb: 2,
-              textShadow: '2px 2px 4px rgba(0,0,0,0.4)'
+              mb: 4,
+              textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
             }}
           >
-            תהליך העבודה שלנו
-          </MotionTypography>
+            הקסם באירוע
+          </Typography>
           
-          <MotionTypography 
-            variants={fadeInUp}
-            variant="h5" 
+          <Typography 
+            variant="h6" 
             sx={{ 
-              mb: 6, 
-              fontSize: { xs: '1.2rem', md: '1.6rem' },
-              maxWidth: 800,
+              mb: 5, 
+              fontSize: { xs: '1.1rem', md: '1.3rem' },
+              maxWidth: 650,
               mx: 'auto',
-              textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+              fontWeight: 400,
+              lineHeight: 1.6
             }}
           >
-            מהחזון הראשוני ועד לחגיגה - כך אנו עובדים להפוך את האירוע שלכם למושלם
-          </MotionTypography>
+            כי כל אירוע קטן הוא רגע גדול
+          </Typography>
           
-          <MotionBox 
-            variants={fadeInUp}
-            sx={{ mt: 8 }}
+          <Button 
+            component={RouterLink} 
+            to="/contact" 
+            variant="contained" 
+            size="large"
+            sx={{ 
+              py: 1.5, 
+              px: 4, 
+              fontWeight: 'bold',
+              fontSize: '1.1rem',
+              backgroundColor: 'white',
+              color: theme.palette.primary.main,
+              '&:hover': {
+                backgroundColor: theme.palette.grey[100],
+              }
+            }}
           >
-            <Tooltip title="גלול למטה">
-              <MotionIconButton
-                onClick={scrollToTimeline}
-                whileTap={{ scale: 0.9 }}
-                animate={{ 
-                  y: [0, 10, 0],
-                  transition: {
-                    duration: 1.5,
-                    repeat: Infinity,
-                    repeatType: 'loop'
-                  }
-                }}
+            בואו נתחיל את הקסם שלכם ✨
+          </Button>
+        </Container>
+      </Box>
+
+      {/* About Us Section */}
+      <Box sx={{ py: { xs: 8, md: 10 }, bgcolor: 'background.paper' }}>
+        <Container maxWidth="lg">
+          <Grid container spacing={6} alignItems="center">
+            <Grid item xs={12} md={12}>
+              <Box 
                 sx={{ 
-                  bgcolor: 'rgba(255,255,255,0.2)',
-                  color: '#fff',
-                  '&:hover': {
-                    bgcolor: 'rgba(255,255,255,0.3)',
-                  },
-                  width: 60,
-                  height: 60
+                  position: 'relative',
+                  p: 4,
+                  borderRadius: 3,
+                  background: 'linear-gradient(145deg, #ffffff, #f6f6f6)',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
+                  borderLeft: '4px solid',
+                  borderColor: 'primary.main',
                 }}
               >
-                <ArrowDownwardIcon fontSize="large" />
-              </MotionIconButton>
-            </Tooltip>
-          </MotionBox>
+                <Box sx={{ 
+                  display: 'grid',
+                  gridTemplateColumns: { xs: '1fr', md: '1fr 200px' },
+                  gridGap: { xs: '20px', md: '30px' }
+                }}>
+                  <Box 
+                    sx={{ 
+                      gridColumn: { xs: '1', md: '2' },
+                      gridRow: { xs: '1', md: '1' },
+                      justifySelf: 'flex-end',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <Avatar
+                      src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=300&auto=format&fit=crop"
+                      alt="מייסד הקסם באירוע"
+                      sx={{
+                        width: { xs: 150, md: 180 },
+                        height: { xs: 150, md: 180 },
+                        border: '6px solid white',
+                        boxShadow: '0 15px 35px rgba(0,0,0,0.2)'
+                      }}
+                    />
+                  </Box>
+                  
+                  <Box 
+                    sx={{ 
+                      gridColumn: { xs: '1', md: '1' },
+                      gridRow: { xs: '2', md: '1' },
+                    }}
+                  >
+                    <Typography 
+                      variant="h3" 
+                      component="h2" 
+                      color="primary.main"
+                      sx={{ 
+                        fontWeight: 'bold',
+                        mb: 3,
+                        position: 'relative',
+                        display: 'inline-block',
+                        '&::after': {
+                          content: '""',
+                          position: 'absolute',
+                          bottom: -10,
+                          left: 0,
+                          width: '40%',
+                          height: 4,
+                          backgroundColor: theme.palette.secondary.main,
+                          borderRadius: 2,
+                        }
+                      }}
+                    >
+                      מי אנחנו
+                    </Typography>
+                    
+                    <Typography 
+                      variant="body1" 
+                      paragraph 
+                      sx={{ 
+                        mb: 3, 
+                        fontSize: '1.25rem', 
+                        lineHeight: 1.7,
+                        color: 'text.primary',
+                        fontWeight: 500
+                      }}
+                    >
+                      אני מתן, מייסד "הקסם באירוע". גדלתי בעולם האירועים – אמא שלי, נועה, מפיקת אירועים, והמשפחה שלי מנהלת את "נועה – הבית לאירועים" באשדוד, אולם אירועים עם אלפי לקוחות מרוצים. האירועים הם חלק ממני – מילדות ראיתי איך כל פרט קטן יכול להפוך ערב פשוט לזיכרון בלתי נשכח.
+                    </Typography>
+                    
+                    <Typography 
+                      variant="body1" 
+                      paragraph 
+                      sx={{ 
+                        fontSize: '1.25rem', 
+                        lineHeight: 1.7,
+                        color: 'text.primary',
+                        fontWeight: 500
+                      }}
+                    >
+                      עם השנים הכרתי מאות ספקים, למדתי מה עובד באמת – ושמרתי קרוב אליי רק את הטובים והאמינים ביותר. אני כאן כדי להנגיש את כל הידע, הניסיון והקשרים שצברתי, ולעזור לכם להפיק את האירוע שלכם בקלות, בשקיפות, ובמחיר הוגן.
+                    </Typography>
+                    
+                    <Button 
+                      component={RouterLink} 
+                      to="/contact" 
+                      variant="contained" 
+                      color="secondary"
+                      size="large"
+                      sx={{ 
+                        mt: 2,
+                        fontWeight: 'bold',
+                        py: 1.2,
+                        px: 4
+                      }}
+                    >
+                      יצירת קשר עם המומחים שלנו
+                    </Button>
+                  </Box>
+                </Box>
+              </Box>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
 
-          {/* Step indicator dots - no auto switching, just show all steps */}
-          <MotionBox 
-            variants={fadeIn}
+      {/* Our Values Section */}
+      <Box sx={{ py: { xs: 8, md: 10 }, bgcolor: theme.palette.grey[50] }}>
+        <Container maxWidth="lg">
+          <Typography 
+            variant="h3" 
+            component="h2" 
+            align="center" 
+            color="primary.main"
             sx={{ 
-              position: 'absolute',
-              bottom: 30,
-              left: 0,
-              right: 0,
-              display: 'flex',
-              justifyContent: 'center',
-              gap: 1
+              fontWeight: 'bold', 
+              mb: 3
             }}
           >
-            {steps.map((step, i) => (
-              <MotionBox 
-                key={i}
-                initial={{ opacity: 0.6, backgroundColor: 'rgba(255,255,255,0.3)' }}
-                animate={{ 
-                  scale: activeStepIndices.includes(i) ? 1.2 : 1,
-                  opacity: activeStepIndices.includes(i) ? 1 : 0.6,
-                  backgroundColor: activeStepIndices.includes(i) ? step.iconBg : 'rgba(255,255,255,0.3)'
-                }}
-                transition={{ duration: 0.3 }}
-                sx={{ 
-                  width: 12,
-                  height: 12,
+            הערכים שלנו
+          </Typography>
+          
+          <Typography 
+            variant="h6" 
+            align="center" 
+            color="text.secondary"
+            sx={{ 
+              mb: 6,
+              maxWidth: 700,
+              mx: 'auto'
+            }}
+          >
+            ערכים המנחים אותנו בכל אירוע ובכל החלטה
+          </Typography>
+          
+          <Box 
+            sx={{ 
+              position: 'relative',
+              my: 8,
+              pb: 12,
+              pt: 8,
+              overflow: 'visible',
+              '&::before': {
+                content: 'none',
+              }
+            }}
+          >
+            <Box 
+              sx={{ 
+                position: 'absolute',
+                width: 180,
+                height: 180,
+                borderRadius: '50%',
+                bgcolor: 'primary.light',
+                opacity: 0.1,
+                top: '5%',
+                left: '5%',
+                zIndex: 0,
+              }} 
+            />
+            <Box 
+              sx={{ 
+                position: 'absolute',
+                width: 150,
+                height: 150,
+                borderRadius: '50%',
+                bgcolor: 'secondary.light',
+                opacity: 0.1,
+                bottom: '15%',
+                right: '8%',
+                zIndex: 0,
+              }} 
+            />
+            <Box 
+              sx={{ 
+                position: 'absolute',
+                width: 200,
+                height: 200,
+                borderRadius: '50%',
+                bgcolor: 'primary.light',
+                opacity: 0.05,
+                bottom: '5%',
+                left: '25%',
+                zIndex: 0,
+              }} 
+            />
+            <Box 
+              sx={{ 
+                position: 'absolute',
+                width: 100,
+                height: 100,
+                borderRadius: '50%',
+                bgcolor: 'secondary.main',
+                opacity: 0.05,
+                top: '30%',
+                right: '20%',
+                zIndex: 0,
+              }} 
+            />
+            <Box 
+              sx={{ 
+                position: 'absolute',
+                width: 60,
+                height: 60,
+                borderRadius: '50%',
+                bgcolor: 'primary.dark',
+                opacity: 0.06,
+                bottom: '35%',
+                left: '10%',
+                zIndex: 0,
+              }} 
+            />
+            {[...Array(20)].map((_, i) => (
+              <Box
+                key={`dot-${i}`}
+                sx={{
+                  position: 'absolute',
+                  width: Math.random() * 5 + 2,
+                  height: Math.random() * 5 + 2,
                   borderRadius: '50%',
-                  cursor: 'pointer'
-                }}
-                onClick={() => {
-                  if (stepRefs.current[i]) {
-                    stepRefs.current[i].current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  }
+                  bgcolor: i % 2 === 0 ? 'primary.main' : 'secondary.main',
+                  opacity: 0.1 + Math.random() * 0.15,
+                  top: `${Math.random() * 100}%`,
+                  left: `${Math.random() * 100}%`,
+                  zIndex: 0,
                 }}
               />
             ))}
-          </MotionBox>
-        </MotionContainer>
-      </MotionBox>
+          
+            <Box 
+              sx={{ 
+                display: 'flex', 
+                flexWrap: 'wrap',
+                justifyContent: 'center',
+                position: 'relative',
+                gap: { xs: 6, sm: 8, md: 10 },
+                px: { xs: 2, md: 4 },
+                zIndex: 1,
+              }}
+            >
+              {values.map((value, index) => {
+                // Determine color pattern based on row position
+                // First row: blue, orange (indices 0, 1)
+                // Second row: orange, blue (indices 2, 3)
+                // This creates the alternating pattern by row
+                const isFirstRow = index < 2;
+                const isFirstInRow = index % 2 === 0;
+                
+                // For first row: primary first, secondary second
+                // For second row: secondary first, primary second
+                const isPrimary = (isFirstRow && isFirstInRow) || (!isFirstRow && !isFirstInRow);
+                
+                return (
+                  <Box 
+                    key={index}
+                    sx={{ 
+                      position: 'relative',
+                      width: { xs: '90%', sm: '46%', md: '46%' },
+                      marginTop: { xs: 3, md: 5 },
+                      marginBottom: { xs: 3, md: 5 },
+                      transform: 'none',
+                      animation: `float${index + 1} 8s ease-in-out infinite`,
+                      '@keyframes float1': {
+                        '0%, 100%': { transform: 'translateY(0px)' },
+                        '50%': { transform: 'translateY(-10px)' }
+                      },
+                      '@keyframes float2': {
+                        '0%, 100%': { transform: 'translateY(0px)' },
+                        '50%': { transform: 'translateY(-8px)' }
+                      },
+                      '@keyframes float3': {
+                        '0%, 100%': { transform: 'translateY(0px)' },
+                        '50%': { transform: 'translateY(-12px)' }
+                      },
+                      '@keyframes float4': {
+                        '0%, 100%': { transform: 'translateY(0px)' },
+                        '50%': { transform: 'translateY(-10px)' }
+                      },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        width: 30,
+                        height: 30,
+                        borderRadius: '50%',
+                        background: isPrimary
+                          ? `radial-gradient(circle, ${theme.palette.primary.light} 0%, rgba(255,255,255,0) 70%)`
+                          : `radial-gradient(circle, ${theme.palette.secondary.light} 0%, rgba(255,255,255,0) 70%)`,
+                        opacity: 0.5,
+                        top: '-10%',
+                        right: isPrimary ? '10%' : 'auto',
+                        left: isPrimary ? 'auto' : '10%',
+                        zIndex: 1,
+                      }}
+                    />
+                    
+                    <Box
+                      sx={{
+                        width: '100%',
+                        height: 0,
+                        paddingBottom: '100%',
+                        borderRadius: '50%',
+                        background: isPrimary
+                          ? `radial-gradient(circle at 30% 30%, ${theme.palette.primary.light} 0%, ${theme.palette.primary.dark} 90%)`
+                          : `radial-gradient(circle at 30% 30%, ${theme.palette.secondary.light} 0%, ${theme.palette.secondary.dark} 90%)`,
+                        position: 'relative',
+                        boxShadow: '0 15px 35px rgba(0,0,0,0.1)',
+                        transition: 'all 0.4s ease',
+                        border: '8px solid',
+                        borderColor: 'rgba(255,255,255,0.15)',
+                        '&::before': {
+                          content: '""',
+                          position: 'absolute',
+                          top: '8%',
+                          left: '8%',
+                          width: '25%',
+                          height: '25%',
+                          borderRadius: '50%',
+                          background: 'rgba(255,255,255,0.15)',
+                          zIndex: 0,
+                        },
+                        '&:hover': {
+                          transform: 'translateY(-8px) scale(1.03)',
+                          boxShadow: '0 20px 40px rgba(0,0,0,0.15)',
+                          borderColor: 'rgba(255,255,255,0.25)',
+                        },
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          p: { xs: 3, sm: 4, md: 4 },
+                          color: 'white',
+                          textAlign: 'center',
+                          overflow: 'hidden',
+                          borderRadius: '50%',
+                        }}
+                      >
+                        <Box sx={{ position: 'relative', mb: 1 }}>
+                          <Avatar
+                            sx={{ 
+                              bgcolor: 'rgba(255, 255, 255, 0.9)', 
+                              color: isPrimary ? 'primary.dark' : 'secondary.dark',
+                              width: { xs: 60, sm: 75, md: 90 },
+                              height: { xs: 60, sm: 75, md: 90 },
+                              mb: { xs: 1.5, md: 2.5 },
+                              boxShadow: '0 6px 12px rgba(0,0,0,0.1)',
+                              border: '4px solid',
+                              borderColor: 'rgba(255,255,255,0.8)',
+                              transform: 'rotate(-5deg)',
+                              transition: 'transform 0.3s ease',
+                              '&:hover': {
+                                transform: 'rotate(0deg) scale(1.1)'
+                              }
+                            }}
+                          >
+                            {React.cloneElement(value.icon, { fontSize: 'large', style: { fontSize: '2rem' } })}
+                          </Avatar>
+                          
+                          <Box 
+                            sx={{ 
+                              position: 'absolute',
+                              width: 12,
+                              height: 5,
+                              borderRadius: '50%',
+                              background: 'rgba(255,255,255,0.8)',
+                              top: '20%',
+                              left: '20%',
+                              transform: 'rotate(30deg)',
+                            }} 
+                          />
+                        </Box>
+                        
+                        <Typography 
+                          variant="h6" 
+                          sx={{ 
+                            mb: 1.5, 
+                            fontWeight: 'bold',
+                            textShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                            fontSize: { xs: '1.1rem', sm: '1.25rem', md: '1.35rem' },
+                            lineHeight: 1.2,
+                            maxWidth: '85%',
+                          }}
+                        >
+                          {value.title}
+                        </Typography>
+                        
+                        <Typography 
+                          variant="body2" 
+                          sx={{ 
+                            fontSize: { xs: '0.8rem', sm: '0.85rem', md: '0.9rem' },
+                            lineHeight: 1.5,
+                            opacity: 0.95,
+                            display: '-webkit-box',
+                            WebkitLineClamp: { xs: 3, sm: 4, md: 5 },
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            maxWidth: '90%',
+                          }}
+                        >
+                          {value.description.length > 100
+                            ? `${value.description.substring(0, 100)}...` 
+                            : value.description}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                );
+              })}
+            </Box>
+          </Box>
+        </Container>
+      </Box>
 
-      {/* Timeline Section */}
-      <Box 
-        ref={timelineRef} 
-        sx={{ 
-          py: { xs: 8, md: 12 },
-          bgcolor: 'background.default',
-          position: 'relative'
-        }}
-      >
+      {/* How It Works Section */}
+      <Box sx={{ 
+        py: { xs: 8, md: 10 }, 
+        bgcolor: 'background.paper',
+        position: 'relative',
+        overflow: 'hidden',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'radial-gradient(circle at 20% 30%, rgba(57, 84, 204, 0.03) 0%, rgba(57, 84, 204, 0) 50%), radial-gradient(circle at 80% 70%, rgba(247, 143, 70, 0.03) 0%, rgba(247, 143, 70, 0) 50%)',
+          zIndex: 0,
+        }
+      }}>
         <Container maxWidth="lg">
-          {/* Section Title */}
-          <MotionBox
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            sx={{ textAlign: 'center', mb: 10 }}
-          >
+          <Box sx={{ position: 'relative', zIndex: 1 }}>
             <Typography 
               variant="h3" 
               component="h2" 
+              align="center" 
+              color="primary.main"
               sx={{ 
                 fontWeight: 'bold', 
                 mb: 2,
-                color: 'primary.main'
+                fontSize: { xs: '2.5rem', md: '3.2rem' }
               }}
             >
-              מהחזון ועד לחגיגה
+              איך זה עובד?
             </Typography>
+            
+            <Divider sx={{ 
+              width: 120, 
+              mx: 'auto', 
+              my: 3, 
+              borderWidth: 3, 
+              borderColor: 'secondary.main',
+              borderRadius: 2
+            }} />
             
             <Typography 
               variant="h6" 
+              align="center" 
+              color="text.secondary"
               sx={{ 
+                mb: 6,
                 maxWidth: 700,
                 mx: 'auto',
-                color: 'text.secondary',
-                mb: 2
+                fontWeight: 500
               }}
             >
-              איך תהליך העבודה שלנו הופך את החלום שלכם למציאות בארבעה שלבים פשוטים
+              תהליך פשוט וברור בדרך לאירוע מושלם
             </Typography>
             
-            <Divider sx={{ width: 100, mx: 'auto', my: 3, borderWidth: 2, borderColor: 'secondary.main' }} />
-          </MotionBox>
-
-          {/* Timeline Indicator Line */}
-          <MotionBox
-            style={{ scaleY: timelineProgress }}
-            sx={{
-              position: 'absolute',
-              left: { xs: 'calc(50% - 1px)', md: 'calc(50% - 1px)' },
-              top: { xs: 200, md: 200 },
-              width: 4,
-              height: '70%',
-              bgcolor: 'primary.main',
-              transformOrigin: 'top',
-              display: { xs: 'none', md: 'block' },
-              zIndex: 1
-            }}
-          />
-
-          {/* Timeline Steps */}
-          <MotionBox sx={{ position: 'relative', zIndex: 2 }}>
-            {steps.map((step, index) => (
-              <TimelineStep 
-                key={step.id} 
-                step={step} 
-                index={index} 
-                isLastStep={index === steps.length - 1} 
-              />
-            ))}
-          </MotionBox>
+            <Box sx={{ 
+              mt: 6,
+              position: 'relative',
+              '&::after': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: { xs: '50%', md: 89 },
+                width: 4,
+                background: `linear-gradient(to bottom, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                transform: { xs: 'translateX(-50%)', md: 'none' },
+                display: { xs: 'none', md: 'block' },
+                zIndex: 0,
+                opacity: 0.3,
+                borderRadius: 4,
+              }
+            }}>
+              {steps.map((step, index) => (
+                <Paper
+                  key={step.id}
+                  elevation={4}
+                  sx={{
+                    p: { xs: 3, md: 4 },
+                    mb: 5,
+                    borderRadius: 3,
+                    display: 'flex',
+                    flexDirection: { xs: 'column', md: 'row' },
+                    alignItems: { xs: 'center', md: 'flex-start' },
+                    position: 'relative',
+                    overflow: 'hidden',
+                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                    '&:hover': {
+                      transform: 'translateY(-5px)',
+                      boxShadow: '0 15px 30px rgba(0,0,0,0.1)'
+                    },
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: 8,
+                      height: '100%',
+                      backgroundColor: step.iconBg
+                    },
+                    background: index % 2 === 0 
+                      ? 'linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(240,245,255,1) 100%)'
+                      : 'linear-gradient(45deg, rgba(255,255,255,1) 0%, rgba(255,245,240,1) 100%)',
+                    zIndex: 1
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      mr: { xs: 0, md: 4 },
+                      mb: { xs: 3, md: 0 },
+                      minWidth: { xs: 'auto', md: 120 }
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: 85,
+                        height: 85,
+                        borderRadius: '50%',
+                        backgroundColor: step.iconBg,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
+                        position: 'relative',
+                        zIndex: 1,
+                        border: '5px solid',
+                        borderColor: 'rgba(255,255,255,0.7)',
+                        transition: 'transform 0.3s ease',
+                        '&:hover': {
+                          transform: 'rotate(5deg) scale(1.05)'
+                        }
+                      }}
+                    >
+                      {React.cloneElement(step.icon, { sx: { fontSize: 45 } })}
+                      <Typography
+                        variant="h5"
+                        sx={{
+                          position: 'absolute',
+                          top: -10,
+                          right: -10,
+                          width: 35,
+                          height: 35,
+                          borderRadius: '50%',
+                          backgroundColor: 'secondary.main',
+                          color: 'white',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontWeight: 'bold',
+                          boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
+                          border: '2px solid white'
+                        }}
+                      >
+                        {step.id}
+                      </Typography>
+                    </Box>
+                  </Box>
+                  
+                  <Box sx={{ flex: 1 }}>
+                    <Typography 
+                      variant="h5" 
+                      component="h3" 
+                      gutterBottom 
+                      sx={{ 
+                        fontWeight: 'bold', 
+                        color: step.iconBg,
+                        mb: 2
+                      }}
+                    >
+                      {step.title}
+                    </Typography>
+                    <Typography 
+                      variant="body1" 
+                      sx={{ 
+                        fontSize: '1.1rem', 
+                        lineHeight: 1.7,
+                        color: 'text.primary'
+                      }}
+                    >
+                      {step.description}
+                    </Typography>
+                  </Box>
+                </Paper>
+              ))}
+            </Box>
+          </Box>
         </Container>
       </Box>
 
-      {/* Call to Action Section */}
+      {/* Why Choose Us Section */}
       <Box 
         sx={{ 
-          py: { xs: 8, md: 10 },
-          bgcolor: 'primary.main',
+          py: { xs: 8, md: 10 }, 
+          bgcolor: theme.palette.grey[50],
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+      >
+        <Container maxWidth="lg">
+          <Typography 
+            variant="h3" 
+            component="h2" 
+            align="center" 
+            color="primary.main"
+            sx={{ 
+              fontWeight: 'bold', 
+              mb: 2
+            }}
+          >
+            למה דווקא אנחנו?
+          </Typography>
+          
+          <Box sx={{ maxWidth: 800, mx: 'auto', mb: 6, textAlign: 'center' }}>
+            <Typography variant="body1" sx={{ fontSize: '1.1rem', mt: 3, lineHeight: 1.7 }}>
+              כי בנינו שירות חדשני ומהפכני שמביא את היתרונות של הפקה מקצועית, אבל בלי העלות הגבוהה של מפיק פרטי.
+              אנחנו עושים את זה קל יותר, מהיר יותר, בטוח יותר – וחוסכים לכם זמן, כסף ודאגות.
+            </Typography>
+          </Box>
+          
+          <Paper
+            elevation={3}
+            sx={{
+              p: 4,
+              borderRadius: 2,
+              backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              textAlign: 'center',
+              maxWidth: 700,
+              mx: 'auto',
+              borderTop: '4px solid',
+              borderColor: 'secondary.main'
+            }}
+          >
+            <Typography 
+              variant="h5" 
+              sx={{ 
+                fontStyle: 'italic', 
+                fontSize: { xs: '1.2rem', md: '1.5rem' },
+                color: theme.palette.text.primary,
+                lineHeight: 1.6
+              }}
+            >
+              אצלנו יש לא רק מקצוענים, אלא גם "אמא ואבא לאירוע" – שמלווים אתכם יד ביד.
+            </Typography>
+          </Paper>
+        </Container>
+      </Box>
+
+      {/* Call To Action */}
+      <Box 
+        sx={{ 
+          py: { xs: 6, md: 8 }, 
+          bgcolor: theme.palette.primary.main,
           color: 'white',
-          position: 'relative'
+          textAlign: 'center'
         }}
       >
         <Container maxWidth="md">
-          <MotionBox
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            sx={{ textAlign: 'center' }}
+          <Typography 
+            variant="h4" 
+            component="h2" 
+            gutterBottom
+            sx={{ 
+              fontWeight: 'bold',
+              mb: 4
+            }}
           >
-            <MotionTypography 
-              variant="h3" 
-              component="h2" 
-              variants={fadeInUp}
-              sx={{ 
-                fontWeight: 'bold',
-                mb: 3
-              }}
-            >
-              מוכנים להתחיל?
-            </MotionTypography>
-            
-            <MotionTypography 
-              variant="h6" 
-              variants={fadeInUp}
-              sx={{ mb: 5 }}
-            >
-              צרו איתנו קשר היום ונתחיל לתכנן יחד את החלום שלכם
-            </MotionTypography>
-            
-            <MotionBox 
-              variants={fadeInUp}
-              sx={{ 
-                display: 'flex', 
-                flexWrap: 'wrap', 
-                gap: 2,
-                justifyContent: 'center'
-              }}
-            >
-              <MotionButton 
-                component={RouterLink} 
-                to="/contact" 
-                variant="contained" 
-                color="secondary" 
-                size="large"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                sx={{ 
-                  px: 4, 
-                  py: 1.5,
-                  fontWeight: 'bold' 
-                }}
-              >
-                לייעוץ חינם
-              </MotionButton>
-              
-              <MotionButton 
-                component="a" 
-                href={contactData.socialMedia?.whatsapp} 
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="outlined" 
-                color="inherit" 
-                size="large"
-                startIcon={<WhatsAppIcon />}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                sx={{ 
-                  borderColor: 'white',
-                  '&:hover': { 
-                    borderColor: 'white'
-                  } 
-                }}
-              >
-                וואטסאפ
-              </MotionButton>
-              
-              <MotionButton 
-                component="a" 
-                href={`tel:${contactData.phone}`}
-                variant="outlined" 
-                color="inherit" 
-                size="large"
-                startIcon={<CallIcon />}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                sx={{ 
-                  borderColor: 'white',
-                  '&:hover': { 
-                    borderColor: 'white'
-                  } 
-                }}
-              >
-                {contactData.phone}
-              </MotionButton>
-            </MotionBox>
-          </MotionBox>
+            בואו נתחיל את הקסם שלכם ✨
+          </Typography>
+          
+          <Button 
+            component={RouterLink} 
+            to="/contact" 
+            variant="contained" 
+            size="large"
+            sx={{ 
+              py: 1.5, 
+              px: 6, 
+              fontSize: '1.2rem',
+              fontWeight: 'bold',
+              backgroundColor: theme.palette.secondary.main,
+              '&:hover': {
+                backgroundColor: theme.palette.secondary.dark,
+              }
+            }}
+          >
+            צרו קשר
+          </Button>
         </Container>
       </Box>
-
-      {/* Back to top button */}
-      <Tooltip title="חזרה למעלה">
-        <MotionFab
-          color="primary"
-          size="medium"
-          aria-label="scroll to top"
-          onClick={scrollToTop}
-          sx={{
-            position: 'fixed',
-            bottom: 20,
-            right: 20,
-            opacity: 0.7,
-            '&:hover': {
-              opacity: 1
-            }
-          }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <KeyboardArrowUpIcon />
-        </MotionFab>
-      </Tooltip>
     </Box>
   );
 };

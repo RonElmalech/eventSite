@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   Box, 
   Container, 
@@ -10,7 +10,6 @@ import {
   IconButton
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import CallIcon from '@mui/icons-material/Call';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -18,37 +17,27 @@ import TouchAppIcon from '@mui/icons-material/TouchApp';
 import { contactData } from '../data/cmsData';
 import ServicePackages from './ServicePackages';
 
-// Define image paths directly
-const weddingImg = './images/services/wedding.jpg';
-const barmitzvahImg = './images/services/barmitzvah.jpg';
-const hennaImg = './images/services/henna.jpg';
-
-// Wrap MUI components with motion
-const MotionBox = motion(Box);
-const MotionTypography = motion(Typography);
-const MotionButton = motion(Button);
+// Define image paths correctly for public assets
+const weddingImg = '/images/services/wedding.jpg';
+const barmitzvahImg = '/images/services/barmitzvah.jpg';
+const hennaImg = '/images/services/henna.jpg';
+const britImg = '/images/services/brit.jpg';
+const birthdayImg = '/images/services/birthday.jpg';
+const businessImg = '/images/services/business.jpg';
 
 // Map of service slugs to actual images 
 const serviceImages = {
   'חתונות': weddingImg,
   'בר-מצווה': barmitzvahImg,
   'חינה': hennaImg,
-  'ימי-הולדת': hennaImg,
-  'ברית': barmitzvahImg,
-  'אירועים-עסקיים': weddingImg,
+  'ימי-הולדת': birthdayImg,
+  'ברית': britImg,
+  'אירועים-עסקיים': businessImg,
 };
 
 const ServicePage = ({ service }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [imageIndex, setImageIndex] = useState(0);
-  
-  // Debug which service is being rendered
-  console.log('ServicePage component received service:', service ? {
-    id: service.id,
-    title: service.title,
-    slug: service.slug
-  } : 'No service data');
   
   if (!service) {
     return (
@@ -61,139 +50,133 @@ const ServicePage = ({ service }) => {
     );
   }
 
-  // Get service images
-  const isWedding = service.id === 1 || service.title === "חתונות";
+  // Get service image
   const serviceImage = serviceImages[service.slug] || weddingImg;
-  
-  // Create an array of images for gallery
-  const imageGallery = [
-    serviceImage,
-    isWedding ? barmitzvahImg : serviceImage,
-    isWedding ? hennaImg : serviceImage
-  ];
 
   return (
     <Box sx={{ py: 8 }}>
-      <Box sx={{ position: 'relative', overflow: 'hidden' }}>
+      <Box sx={{ 
+        background: '#ffffff',
+        borderRadius: 2,
+        boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+      }}>
         <Container maxWidth="lg">
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={6}>
-              <MotionTypography
+          <Box 
+            sx={{ 
+              display: 'flex', 
+              flexDirection: { xs: 'column', md: 'row' },
+              gap: 5,
+              py: 4
+            }}
+          >
+            {/* Text content - must appear visually RIGHT in RTL */}
+            <Box 
+              sx={{ 
+                flex: '1 1 50%', 
+                order: { xs: 1, md: 1 },
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+                textAlign: 'right'
+              }}
+              style={{textAlign: 'right'}}
+            >
+              <Typography
                 variant="h2"
                 component="h1"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
                 sx={{ 
                   fontWeight: 'bold',
                   mb: 3,
-                  color: 'primary.main'
+                  color: 'primary.main',
+                  textAlign: 'right',
+                  width: '100%'
                 }}
+                style={{textAlign: 'right'}}
               >
                 {service.title}
-              </MotionTypography>
+              </Typography>
               
-              <MotionTypography
+              <Typography
                 variant="h5"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
                 sx={{ 
                   mb: 4,
-                  color: 'text.secondary'
+                  color: 'text.secondary',
+                  textAlign: 'right',
+                  width: '100%'
                 }}
+                style={{textAlign: 'right'}}
               >
                 {service.description}
-              </MotionTypography>
+              </Typography>
               
-              <Box sx={{ display: 'flex', gap: 2, mb: 4 }}>
-                <MotionButton
+              <Box 
+                sx={{ 
+                  display: 'flex', 
+                  gap: 2, 
+                  mb: 4,
+                  justifyContent: 'flex-end',
+                  width: '100%'
+                }}
+                style={{textAlign: 'right'}}
+              >
+                <Button
                   variant="contained"
                   color="primary"
                   size="large"
                   component={RouterLink}
                   to="/contact"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
                   startIcon={<TouchAppIcon />}
                 >
                   צור קשר
-                </MotionButton>
+                </Button>
                 
-                <MotionButton
+                <Button
                   variant="outlined"
                   color="primary"
                   size="large"
                   component="a"
                   href={`tel:${contactData.phone}`}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.5 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
                   startIcon={<CallIcon />}
                 >
                   התקשר עכשיו
-                </MotionButton>
+                </Button>
               </Box>
-            </Grid>
+            </Box>
             
-            <Grid item xs={12} md={6}>
-              <MotionBox
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.3 }}
+            {/* Image - must appear visually LEFT in RTL */}
+            <Box 
+              sx={{ 
+                flex: '1 1 50%', 
+                order: { xs: 2, md: 2 },
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <Box
                 sx={{ 
-                  position: 'relative',
                   borderRadius: 4,
                   overflow: 'hidden',
-                  boxShadow: '0 10px 30px rgba(0,0,0,0.15)'
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
+                  width: '100%',
+                  height: { xs: 300, md: 400 },
                 }}
               >
                 <Box
                   component="img"
-                  src={imageGallery[imageIndex]}
+                  src={serviceImage}
                   alt={service.title}
                   sx={{
                     width: '100%',
-                    height: 'auto',
+                    height: '100%',
+                    objectFit: 'cover',
                     display: 'block'
                   }}
                 />
-                
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    p: 2,
-                    background: 'linear-gradient(to top, rgba(0,0,0,0.7), transparent)',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    gap: 2
-                  }}
-                >
-                  <IconButton
-                    onClick={() => setImageIndex((prev) => (prev - 1 + imageGallery.length) % imageGallery.length)}
-                    sx={{ color: 'white' }}
-                  >
-                    <ArrowBackIcon />
-                  </IconButton>
-                  
-                  <IconButton
-                    onClick={() => setImageIndex((prev) => (prev + 1) % imageGallery.length)}
-                    sx={{ color: 'white' }}
-                  >
-                    <ArrowForwardIcon />
-                  </IconButton>
-                </Box>
-              </MotionBox>
-            </Grid>
-          </Grid>
+              </Box>
+            </Box>
+          </Box>
         </Container>
       </Box>
       

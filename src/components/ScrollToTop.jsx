@@ -5,7 +5,12 @@ const ScrollToTop = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // Smoother scroll to top without any animation
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'auto' // Use 'auto' instead of 'smooth' to avoid animations
+    });
   }, [pathname]);
 
   return null;

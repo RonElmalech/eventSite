@@ -9,7 +9,5 @@ console.log('Main entry point loading')
 // Modern React approach using JSX
 const root = createRoot(document.getElementById('root'))
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <App />
 ) 

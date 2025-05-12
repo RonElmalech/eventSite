@@ -29,6 +29,7 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import BuildIcon from '@mui/icons-material/Build';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { eventPackages } from '../data/eventPackages';
+import PriceCalculator from './PriceCalculator';
 
 // Add-ons price mapping
 const ADDONS_PRICES = {
@@ -133,18 +134,13 @@ const PackageCard = ({ packageInfo, isPopular, onSelect }) => {
           display: 'flex', 
           flexDirection: 'column',
           position: 'relative',
-          transition: 'all 0.3s ease',
-          '&:hover': {
-            transform: 'translateY(-10px)',
-            boxShadow: 10,
-            border: `2px solid ${theme.palette.primary.main}`,
-            '& .price-text': {
-              color: 'primary.main',
-              transform: 'scale(1.05)',
-            },
-            '& .package-title': {
-              color: 'primary.main',
-            }
+          boxShadow: 2,
+          border: isPopular ? `2px solid ${theme.palette.primary.main}` : 'none',
+          '& .price-text': {
+            color: isPopular ? 'primary.main' : 'text.primary'
+          },
+          '& .package-title': {
+            color: isPopular ? 'primary.main' : 'text.primary'
           }
         }}
       >
@@ -176,7 +172,6 @@ const PackageCard = ({ packageInfo, isPopular, onSelect }) => {
             fontWeight="bold" 
             align="center"
             color="text.primary"
-            sx={{ transition: 'color 0.3s ease' }}
           >
             {packageInfo.name}
           </Typography>
@@ -195,7 +190,6 @@ const PackageCard = ({ packageInfo, isPopular, onSelect }) => {
               color="text.primary" 
               sx={{ 
                 fontWeight: 'bold',
-                transition: 'all 0.3s ease',
                 fontSize: { xs: '1.75rem', sm: '2rem' }
               }}
             >
@@ -479,6 +473,7 @@ const ServicePackages = ({ serviceName }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const packages = getPackagesForService(serviceName);
   const navigate = useNavigate();
+  const [calculatorOpen, setCalculatorOpen] = useState(false);
   
   const handlePackageSelect = (packageInfo) => {
     // Calculate total price including add-ons
@@ -538,21 +533,75 @@ const ServicePackages = ({ serviceName }) => {
           חבילות {serviceName}
         </Typography>
         
-        <Grid container spacing={4}>
-          {packages.map((pkg, index) => (
-            <Grid item xs={12} md={4} key={index}>
-              <PackageCard 
-                packageInfo={pkg} 
-                isPopular={index === 1} // Mark the middle package as popular
-                onSelect={handlePackageSelect}
-              />
-            </Grid>
-          ))}
-        </Grid>
+        {packages.length === 0 ? (
+          <Paper elevation={3} sx={{ p: 4, borderRadius: 2, textAlign: 'center', mb: 6 }}>
+            <Typography variant="h5" component="div" gutterBottom fontWeight="bold">
+              אנחנו עובדים על חבילות חדשות
+            </Typography>
+            <Typography variant="body1" paragraph>
+              אנחנו כרגע בתהליך פיתוח של חבילות חדשות עבור שירות זה. 
+              בינתיים, ניתן ליצור איתנו קשר לקבלת מידע על מחירים וחבילות מותאמות אישית.
+            </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              component={RouterLink}
+              to="/contact"
+              sx={{ mt: 2 }}
+            >
+              צור קשר
+            </Button>
+          </Paper>
+        ) : (
+          <Grid container spacing={4} justifyContent="center">
+            {packages.map((pkg, index) => (
+              <Grid item xs={12} md={4} key={index}>
+                <PackageCard 
+                  packageInfo={pkg} 
+                  isPopular={index === 1} // Mark the middle package as popular
+                  onSelect={handlePackageSelect}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        )}
         
-        <Box sx={{ mt: 8 }}>
-          <CustomPackageBuilder onSelect={handlePackageSelect} />
+        {/* Price Calculator Button */}
+        <Box sx={{ mt: 6, textAlign: 'center' }}>
+          <Button
+            variant="contained"
+            color="secondary"
+            size="large"
+            onClick={() => setCalculatorOpen(true)}
+            sx={{
+              fontWeight: 'bold',
+              py: 1.5,
+              px: 4,
+              fontSize: '1.1rem'
+            }}
+          >
+            חשב מחיר לאורח
+          </Button>
         </Box>
+        
+        {/* Price Calculator Dialog */}
+        <Dialog
+          open={calculatorOpen}
+          onClose={() => setCalculatorOpen(false)}
+          maxWidth="md"
+          fullWidth
+        >
+          <DialogContent sx={{ p: 3 }}>
+            <PriceCalculator onClose={() => setCalculatorOpen(false)} />
+          </DialogContent>
+        </Dialog>
+        
+        {packages.length > 0 && (
+          <Box sx={{ mt: 8 }}>
+            <CustomPackageBuilder onSelect={handlePackageSelect} />
+          </Box>
+        )}
       </Container>
     </Box>
   );

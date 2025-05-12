@@ -22,22 +22,15 @@ const ContactPage = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const logoImage = './assets/logo-with-slogan.png';
-  const heroBackground = './assets/gallery/wedding-1.jpg';
+  const heroBackground = './images/services/wedding.jpg';
 
   useEffect(() => {
-    // This would be replaced with an actual API call in production
-    const fetchData = () => {
-      // Simulating API call delay
-      setTimeout(() => {
-        setData({
-          contact: contactData,
-          services: servicesData.services
-        });
-        setLoading(false);
-      }, 300);
-    };
-
-    fetchData();
+    // Instead of simulating API call delay, load data immediately
+    setData({
+      contact: contactData,
+      services: servicesData.services
+    });
+    setLoading(false);
   }, []);
 
   if (loading) {

@@ -70,9 +70,7 @@ const ServicesPage = () => {
                 display: 'flex', 
                 flexDirection: { xs: 'column', md: index % 2 === 0 ? 'row' : 'row-reverse' },
                 overflow: 'hidden',
-                boxShadow: 3,
-                transition: '0.3s',
-                '&:hover': { boxShadow: 6 }
+                boxShadow: 3
               }}
             >
               <CardMedia

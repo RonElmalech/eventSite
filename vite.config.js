@@ -20,7 +20,14 @@ export default defineConfig({
         assetFileNames: 'assets/[name].[hash].[ext]'
       }
     },
-    sourcemap: true
+    sourcemap: false,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    }
   },
   resolve: {
     extensions: ['.mjs', '.js', '.mts', '.ts', '.jsx', '.tsx', '.json'],
@@ -29,5 +36,8 @@ export default defineConfig({
       '@assets': resolve(__dirname, 'public/assets'),
       '@images': resolve(__dirname, 'public/images')
     }
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', '@mui/material', '@emotion/react', '@emotion/styled']
   }
 })

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Fab, Tooltip, Zoom, Popover, Button, Typography, IconButton, Divider, Switch, FormControlLabel, Radio, RadioGroup, FormControl, FormLabel, Slider, Grid, Select, MenuItem, Badge, Tabs, Tab, Menu } from '@mui/material';
+import { Box, Fab, Tooltip, Popover, Button, Typography, IconButton, Divider, Switch, FormControlLabel, Radio, RadioGroup, FormControl, FormLabel, Slider, Grid, Select, MenuItem, Badge, Tabs, Tab, Menu } from '@mui/material';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
 import FormatSizeIcon from '@mui/icons-material/FormatSize';
@@ -15,7 +15,6 @@ import ColorLensIcon from '@mui/icons-material/ColorLens';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import ReplayIcon from '@mui/icons-material/Replay';
-import AnimationIcon from '@mui/icons-material/Animation';
 import KeyboardIcon from '@mui/icons-material/Keyboard';
 import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
 import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
@@ -29,6 +28,7 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import MicIcon from '@mui/icons-material/Mic';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import BookIcon from '@mui/icons-material/Book';
+import ShareIcon from '@mui/icons-material/Share';
 import { contactData } from '../data/cmsData';
 
 const FloatingButtons = ({ phoneNumber = contactData?.phone || "+972-123456789", whatsappNumber = contactData?.whatsapp || "+972123456789" }) => {
@@ -40,7 +40,6 @@ const FloatingButtons = ({ phoneNumber = contactData?.phone || "+972-123456789",
   const [screenReader, setScreenReader] = useState(false);
   const [dyslexicFont, setDyslexicFont] = useState(false);
   const [cursorSize, setCursorSize] = useState(1);
-  const [reduceMotion, setReduceMotion] = useState(false);
   const [keyboardNavigation, setKeyboardNavigation] = useState(false);
   const [textAlignment, setTextAlignment] = useState('right');
   const [readerSpeed, setReaderSpeed] = useState(1);
@@ -52,6 +51,64 @@ const FloatingButtons = ({ phoneNumber = contactData?.phone || "+972-123456789",
   const shortcutsOpen = Boolean(shortcutsAnchorEl);
 
   const [textToSpeech, setTextToSpeech] = useState(false);
+
+  // Add useEffect for loading the hostages ticker script
+  useEffect(() => {
+    // First clear any existing sessionStorage flag that might prevent the ticker from showing
+    if (window.sessionStorage) {
+      window.sessionStorage.removeItem('btnhSessionClosed');
+    }
+
+    // Create the script element
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://bringthemhomenow.net/1.3.0/hostages-ticker.js';
+    script.setAttribute(
+      'integrity',
+      'sha384-MmP7bD5QEJWvJccg9c0lDnn3LjjqQWDiRCxRV+NU8hij15icuwb29Jfw1TqJwuSv'
+    );
+    script.setAttribute('crossorigin', 'anonymous');
+    
+    // Override the sessionStorage function after the script loads
+    script.onload = () => {
+      // Create a MutationObserver to watch for the close button click
+      const observer = new MutationObserver((mutations) => {
+        // If the ticker is removed from DOM, reload it after a delay
+        if (!document.getElementById('bthn')) {
+          setTimeout(() => {
+            // Clear the sessionStorage flag
+            if (window.sessionStorage) {
+              window.sessionStorage.removeItem('btnhSessionClosed');
+            }
+            
+            // Reload the script
+            const newScript = document.createElement('script');
+            newScript.type = 'text/javascript';
+            newScript.src = 'https://bringthemhomenow.net/1.3.0/hostages-ticker.js';
+            newScript.setAttribute(
+              'integrity',
+              'sha384-MmP7bD5QEJWvJccg9c0lDnn3LjjqQWDiRCxRV+NU8hij15icuwb29Jfw1TqJwuSv'
+            );
+            newScript.setAttribute('crossorigin', 'anonymous');
+            document.getElementsByTagName('head')[0].appendChild(newScript);
+          }, 500);
+        }
+      });
+      
+      // Start observing the document body
+      observer.observe(document.body, { childList: true, subtree: true });
+    };
+    
+    // Append the script to the head
+    document.getElementsByTagName('head')[0].appendChild(script);
+
+    // Clean up function
+    return () => {
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
+    };
+  }, []);
 
   const handleAccessibilityClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -169,10 +226,6 @@ const FloatingButtons = ({ phoneNumber = contactData?.phone || "+972-123456789",
     // Reset cursor size
     setCursorSize(1);
     document.documentElement.style.setProperty('--cursor-size', '16px');
-
-    // Reset reduced motion
-    setReduceMotion(false);
-    document.body.classList.remove('reduce-motion');
     
     // Reset keyboard navigation
     setKeyboardNavigation(false);
@@ -224,226 +277,83 @@ const FloatingButtons = ({ phoneNumber = contactData?.phone || "+972-123456789",
     setCursorSize(newValue);
     document.documentElement.style.setProperty('--cursor-size', `${newValue * 16}px`);
   };
-  
-  // Toggle reduced motion
-  const toggleReduceMotion = () => {
-    setReduceMotion(!reduceMotion);
-    if (!reduceMotion) {
-      document.body.classList.add('reduce-motion');
-      // Apply CSS class that reduces animations
-      document.querySelectorAll('*').forEach(element => {
-        const style = window.getComputedStyle(element);
-        if (style.animation !== 'none' || style.transition !== 'none') {
-          element.style.animation = 'none';
-          element.style.transition = 'none';
-        }
-      });
-    } else {
-      document.body.classList.remove('reduce-motion');
-      // Remove inline styles to restore animations
-      document.querySelectorAll('*').forEach(element => {
-        if (element.style.animation === 'none') {
-          element.style.removeProperty('animation');
-        }
-        if (element.style.transition === 'none') {
-          element.style.removeProperty('transition');
-        }
-      });
-    }
-  };
-  
-  // Toggle keyboard navigation
+
   const toggleKeyboardNavigation = () => {
     setKeyboardNavigation(!keyboardNavigation);
     if (!keyboardNavigation) {
       document.body.classList.add('keyboard-navigation');
-      // Enhance focus visibility
-      document.documentElement.style.setProperty('--focus-outline-width', '4px');
-      document.documentElement.style.setProperty('--focus-outline-color', '#4d90fe');
     } else {
       document.body.classList.remove('keyboard-navigation');
-      document.documentElement.style.removeProperty('--focus-outline-width');
-      document.documentElement.style.removeProperty('--focus-outline-color');
     }
   };
-  
-  // Handle text alignment change
+
   const handleTextAlignmentChange = (newAlignment) => {
     setTextAlignment(newAlignment);
-    
-    // Apply text alignment styles to the body
     document.body.style.textAlign = newAlignment;
-    
-    // Apply specific styles for flex containers and other elements
-    const style = document.createElement('style');
-    style.id = 'text-alignment-style';
-    
-    // Remove any existing alignment style element
-    const existingStyle = document.getElementById('text-alignment-style');
-    if (existingStyle) {
-      existingStyle.remove();
-    }
-    
-    // Create CSS based on alignment
-    let css = '';
-    if (newAlignment === 'center') {
-      css = `
-        .MuiContainer-root, .MuiBox-root, .MuiPaper-root {
-          text-align: center !important;
-        }
-        .MuiBox-root:not(.accessibility-panel *) {
-          justify-content: center !important;
-        }
-      `;
-    } else if (newAlignment === 'left') {
-      css = `
-        .MuiContainer-root, .MuiBox-root, .MuiPaper-root {
-          text-align: left !important;
-        }
-        .MuiBox-root:not(.accessibility-panel *) {
-          justify-content: flex-start !important;
-        }
-      `;
-    } else if (newAlignment === 'right') {
-      css = `
-        .MuiContainer-root, .MuiBox-root, .MuiPaper-root {
-          text-align: right !important;
-        }
-        .MuiBox-root:not(.accessibility-panel *) {
-          justify-content: flex-end !important;
-        }
-      `;
-    }
-    
-    style.innerHTML = css;
-    document.head.appendChild(style);
   };
 
-  // Handle reader speed change
   const handleReaderSpeedChange = (event, newValue) => {
     setReaderSpeed(newValue);
-    
-    // This would be connected to an actual screen reader
-    // Here we're just setting a variable that could be used by one
-    window.screenReaderSpeed = newValue;
-    
-    // For demonstration purposes only - would be removed in production
-    if (screenReader) {
-      console.log(`Screen reader speed set to ${newValue}x`);
-    }
   };
 
-  // Toggle focus mode
   const toggleFocusMode = () => {
     setFocusMode(!focusMode);
-    
     if (!focusMode) {
-      // Apply focus mode
       const style = document.createElement('style');
       style.id = 'focus-mode-style';
-      style.innerHTML = `
-        body:not(.accessibility-panel) > *:not(:hover):not(:focus-within) {
-          opacity: 0.5;
-          transition: opacity 0.3s ease;
-        }
-        body:not(.accessibility-panel) > *:hover, 
-        body:not(.accessibility-panel) > *:focus-within {
-          opacity: 1;
-          transition: opacity 0.3s ease;
+      style.textContent = `
+        body > *:not(:focus):not(:hover) {
+          opacity: 0.3;
         }
       `;
       document.head.appendChild(style);
     } else {
-      // Remove focus mode
-      const focusModeStyle = document.getElementById('focus-mode-style');
-      if (focusModeStyle) {
-        focusModeStyle.remove();
+      const style = document.getElementById('focus-mode-style');
+      if (style) {
+        style.remove();
       }
     }
   };
 
-  // Handle tab change for accessibility panel
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
 
-  // Toggle shortcuts info
   const toggleShortcutsInfo = (event) => {
-    setShortcutsAnchorEl(event ? event.currentTarget : null);
+    setShortcutsAnchorEl(event.currentTarget);
   };
 
-  // Toggle text-to-speech functionality
   const toggleTextToSpeech = () => {
     setTextToSpeech(!textToSpeech);
-    // Apply text-to-speech effect
     if (!textToSpeech) {
-      // Enable text-to-speech
       document.body.classList.add('text-to-speech');
-      // You would implement the actual text-to-speech functionality here
     } else {
-      // Disable text-to-speech
       document.body.classList.remove('text-to-speech');
     }
   };
 
-  // Handle phone call
   const handlePhoneCall = () => {
     window.location.href = `tel:${phoneNumber}`;
   };
 
-  // Register keyboard shortcuts
   const setupKeyboardShortcuts = () => {
-    if (keyboardNavigation) {
-      document.addEventListener('keydown', handleKeyboardShortcuts);
-    } else {
-      document.removeEventListener('keydown', handleKeyboardShortcuts);
-    }
     document.addEventListener('keydown', handleKeyboardShortcuts);
     return () => {
       document.removeEventListener('keydown', handleKeyboardShortcuts);
     };
   };
 
-  // Handle keyboard shortcuts
   const handleKeyboardShortcuts = (event) => {
-    // Only apply shortcuts when modifier key is pressed
-    if (event.altKey && event.shiftKey) {
-      switch (event.key) {
-        case '+':
-          event.preventDefault();
-          increaseFontSize();
-          break;
-        case '-':
-          event.preventDefault();
-          decreaseFontSize();
-          break;
-        case 'c':
-          event.preventDefault();
-          toggleHighContrast();
-          break;
-        case 'd':
-          event.preventDefault();
-          handleDyslexicFontToggle();
-          break;
-        case 'f':
-          event.preventDefault();
-          toggleFocusMode();
-          break;
-        case 'r':
-          event.preventDefault();
-          toggleReduceMotion();
-          break;
+    if (event.altKey) {
+      switch(event.key) {
         case 'a':
-          event.preventDefault();
           handleAccessibilityClick(event);
           break;
-        case 't':
-          event.preventDefault();
-          toggleTextToSpeech();
-          break;
-        case 'p':
-          event.preventDefault();
+        case 'c':
           handlePhoneCall();
+          break;
+        case 'w':
+          window.open(`https://wa.me/${whatsappNumber}`, '_blank');
           break;
         default:
           break;
@@ -451,278 +361,421 @@ const FloatingButtons = ({ phoneNumber = contactData?.phone || "+972-123456789",
     }
   };
 
-  // Apply keyboard shortcuts when the component mounts or when keyboardNavigation changes
-  useState(() => {
+  useEffect(() => {
     setupKeyboardShortcuts();
-    return () => {
-      document.removeEventListener('keydown', handleKeyboardShortcuts);
-    };
-  }, [keyboardNavigation]);
+  }, []);
+
+  // Improved share functionality with WhatsApp option
+  const handleShare = async () => {
+    try {
+      // Get current page title and URL
+      const pageTitle = document.title;
+      const pageUrl = window.location.href;
+      
+      // Create share message in Hebrew
+      const shareMessage = `בואו לראות את האתר "הקסם באירוע" - מה שיהפוך את האירוע שלכם למושלם: ${pageUrl}`;
+      
+      // Create a menu to choose sharing method
+      const shareOptions = document.createElement('div');
+      shareOptions.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        z-index: 10000;
+        direction: rtl;
+        text-align: center;
+        min-width: 250px;
+      `;
+      
+      const heading = document.createElement('h3');
+      heading.textContent = 'איך תרצה לשתף?';
+      heading.style.margin = '0 0 15px 0';
+      shareOptions.appendChild(heading);
+      
+      // WhatsApp option
+      const whatsappBtn = document.createElement('button');
+      whatsappBtn.innerHTML = '<span style="display:flex;align-items:center;justify-content:center;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="margin-right:10px;fill:#25D366"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg> וואטסאפ</span>';
+      whatsappBtn.style.cssText = `
+        background: #ffffff;
+        color: #000000;
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin: 5px 0;
+        width: 100%;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        display: block;
+      `;
+      whatsappBtn.onclick = () => {
+        // Encode message for URL
+        const encodedMessage = encodeURIComponent(shareMessage);
+        // Open WhatsApp with pre-filled message
+        window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
+        document.body.removeChild(shareOptions);
+        document.body.removeChild(overlay);
+      };
+      shareOptions.appendChild(whatsappBtn);
+      
+      // Copy link option
+      const copyBtn = document.createElement('button');
+      copyBtn.innerHTML = '<span style="display:flex;align-items:center;justify-content:center;"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="margin-right:10px;fill:#333"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg> העתק קישור</span>';
+      copyBtn.style.cssText = `
+        background: #ffffff;
+        color: #000000;
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin: 5px 0;
+        width: 100%;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        display: block;
+      `;
+      copyBtn.onclick = () => {
+        const textarea = document.createElement('textarea');
+        textarea.value = shareMessage;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        document.body.removeChild(shareOptions);
+        document.body.removeChild(overlay);
+        alert('קישור לשיתוף הועתק ללוח! כעת תוכל להדביק אותו בכל מקום.');
+      };
+      shareOptions.appendChild(copyBtn);
+      
+      // Cancel button
+      const cancelBtn = document.createElement('button');
+      cancelBtn.textContent = 'ביטול';
+      cancelBtn.style.cssText = `
+        background: none;
+        color: #666;
+        border: none;
+        padding: 10px;
+        margin: 10px 0 0 0;
+        width: 100%;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+      `;
+      cancelBtn.onclick = () => {
+        document.body.removeChild(shareOptions);
+        document.body.removeChild(overlay);
+      };
+      shareOptions.appendChild(cancelBtn);
+      
+      // Add dimmed overlay
+      const overlay = document.createElement('div');
+      overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 9999;
+      `;
+      overlay.onclick = () => {
+        document.body.removeChild(shareOptions);
+        document.body.removeChild(overlay);
+      };
+      
+      // Add elements to body
+      document.body.appendChild(overlay);
+      document.body.appendChild(shareOptions);
+      
+    } catch (error) {
+      console.error('Error sharing:', error);
+    }
+  };
 
   return (
-    <Box
-      sx={{
-        position: 'fixed',
-        bottom: 20,
-        right: 20,
+    <>
+      {/* Hostages Ticker Widget */}
+      <Box sx={{ 
+        position: 'fixed', 
+        top: 100, 
+        right: 16, 
+        zIndex: 1000,
+      }}>
+        <div id="bthn" lang="he"></div>
+      </Box>
+
+      {/* Floating Buttons */}
+      <Box sx={{ 
+        position: 'fixed', 
+        bottom: 16, 
+        right: 16, 
         zIndex: 1000,
         display: 'flex',
         flexDirection: 'column',
-        gap: 2,
-      }}
-    >
-      {/* Phone Button */}
-      <Tooltip title="התקשר לשירות לקוחות" placement="left" TransitionComponent={Zoom} arrow>
-        <Fab
-          color="primary"
-          aria-label="התקשר לשירות לקוחות"
-          size="medium"
-          onClick={() => window.location.href = `tel:${phoneNumber}`}
-          sx={{
-            boxShadow: 3,
-            bgcolor: '#FF8C00',
-            color: 'white',
-            '&:hover': {
-              bgcolor: '#E67E00',
-              transform: 'scale(1.05)',
-            },
-          }}
-        >
-          <PhoneIcon />
-        </Fab>
-      </Tooltip>
-      
-      {/* WhatsApp Button */}
-      <Tooltip title="צור קשר בוואטסאפ" placement="left" TransitionComponent={Zoom} arrow>
-        <Fab
-          color="success"
-          aria-label="צור קשר בוואטסאפ"
-          size="medium"
-          onClick={() =>
-            window.open(
-              `https://wa.me/${whatsappNumber}?text=היי, אני מעוניין לשמוע עוד פרטים על האירוע שלכם`,
-              "_blank"
-            )
-          }
-          sx={{
-            boxShadow: 3,
-            bgcolor: '#25D366',
-            '&:hover': {
-              bgcolor: '#128C7E',
-              transform: 'scale(1.05)',
-            },
-          }}
-        >
-          <WhatsAppIcon />
-        </Fab>
-      </Tooltip>
+        gap: 2
+      }}>
+        <Tooltip title="WhatsApp">
+          <Fab
+            color="success"
+            onClick={() => window.open(`https://wa.me/${whatsappNumber}`, '_blank')}
+          >
+            <WhatsAppIcon />
+          </Fab>
+        </Tooltip>
 
-      {/* Accessibility Button */}
-      <Tooltip title="אפשרויות נגישות" placement="left" TransitionComponent={Zoom} arrow>
-        <Badge 
-          color="primary" 
-          variant="dot" 
-          invisible={!keyboardNavigation && !highContrast && !dyslexicFont}
-        >
+        <Tooltip title="התקשר">
           <Fab
             color="secondary"
-            aria-label="אפשרויות נגישות"
-            size="medium"
+            onClick={handlePhoneCall}
+          >
+            <CallIcon />
+          </Fab>
+        </Tooltip>
+        
+        {/* Add Share Button */}
+        <Tooltip title="שתף דף זה">
+          <Fab
+            color="info"
+            onClick={handleShare}
+          >
+            <ShareIcon />
+          </Fab>
+        </Tooltip>
+
+        <Tooltip title="נגישות">
+          <Fab
+            color="primary"
             onClick={handleAccessibilityClick}
-            aria-expanded={Boolean(anchorEl)}
-            aria-haspopup="true"
-            sx={{
-              boxShadow: 3,
-              bgcolor: '#1976d2',
-              color: 'white',
-              '&:hover': {
-                bgcolor: '#115293',
-                transform: 'scale(1.05)',
-              },
-            }}
           >
             <AccessibilityNewIcon />
           </Fab>
-        </Badge>
-      </Tooltip>
+        </Tooltip>
 
-      {/* Accessibility Menu */}
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-        PaperProps={{
-          sx: {
-            p: 2,
-            maxWidth: '100%',
-            width: 350,
-            mt: 1.5,
-          },
-        }}
-      >
-        <Typography variant="h6" gutterBottom>אפשרויות נגישות</Typography>
+        <Popover
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+        >
+          <Box sx={{ p: 2, width: 300 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+              <Typography variant="h6">הגדרות נגישות</Typography>
+              <IconButton onClick={handleClose} size="small">
+                <CloseIcon />
+              </IconButton>
+            </Box>
 
-        {/* Text Size */}
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="subtitle1" gutterBottom>גודל טקסט</Typography>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton onClick={decreaseFontSize} color="primary" size="small">
-              <TextDecreaseIcon />
-            </IconButton>
-            <Slider
-              value={fontSize}
-              min={70}
-              max={150}
-              step={10}
-              onChange={(e, newValue) => setFontSize(newValue)}
-              sx={{ mx: 2 }}
-            />
-            <IconButton onClick={increaseFontSize} color="primary" size="small">
-              <TextIncreaseIcon />
-            </IconButton>
+            <Tabs value={tabValue} onChange={handleTabChange} sx={{ mb: 2 }}>
+              <Tab label="טקסט" />
+              <Tab label="צבעים" />
+              <Tab label="ניווט" />
+            </Tabs>
+
+            {tabValue === 0 && (
+              <Box>
+                <Typography variant="subtitle2" gutterBottom>גודל טקסט</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <IconButton onClick={decreaseFontSize} size="small">
+                    <TextDecreaseIcon />
+                  </IconButton>
+                  <Typography sx={{ mx: 2 }}>{fontSize}%</Typography>
+                  <IconButton onClick={increaseFontSize} size="small">
+                    <TextIncreaseIcon />
+                  </IconButton>
+                  <IconButton onClick={resetFontSize} size="small">
+                    <ReplayIcon />
+                  </IconButton>
+                </Box>
+
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={dyslexicFont}
+                      onChange={handleDyslexicFontToggle}
+                    />
+                  }
+                  label="פונט דיסלקטי"
+                />
+
+                <Typography variant="subtitle2" gutterBottom sx={{ mt: 2 }}>
+                  מרווח טקסט
+                </Typography>
+                <Slider
+                  value={textSpacing}
+                  onChange={handleTextSpacingChange}
+                  min={0}
+                  max={3}
+                  step={0.1}
+                  marks
+                  valueLabelDisplay="auto"
+                />
+
+                <Typography variant="subtitle2" gutterBottom sx={{ mt: 2 }}>
+                  יישור טקסט
+                </Typography>
+                <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+                  <IconButton
+                    onClick={() => handleTextAlignmentChange('right')}
+                    color={textAlignment === 'right' ? 'primary' : 'default'}
+                  >
+                    <FormatAlignRightIcon />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => handleTextAlignmentChange('center')}
+                    color={textAlignment === 'center' ? 'primary' : 'default'}
+                  >
+                    <FormatAlignCenterIcon />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => handleTextAlignmentChange('left')}
+                    color={textAlignment === 'left' ? 'primary' : 'default'}
+                  >
+                    <FormatAlignLeftIcon />
+                  </IconButton>
+                </Box>
+              </Box>
+            )}
+
+            {tabValue === 1 && (
+              <Box>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={highContrast}
+                      onChange={toggleHighContrast}
+                    />
+                  }
+                  label="ניגודיות גבוהה"
+                />
+
+                <Typography variant="subtitle2" gutterBottom sx={{ mt: 2 }}>
+                  מצב צבעים
+                </Typography>
+                <FormControl fullWidth sx={{ mb: 2 }}>
+                  <Select
+                    value={colorMode}
+                    onChange={handleColorModeChange}
+                    size="small"
+                  >
+                    <MenuItem value="normal">רגיל</MenuItem>
+                    <MenuItem value="grayscale">גווני אפור</MenuItem>
+                    <MenuItem value="invert">היפוך צבעים</MenuItem>
+                    <MenuItem value="protanopia">פרוטנופיה</MenuItem>
+                    <MenuItem value="deuteranopia">דוטרנופיה</MenuItem>
+                    <MenuItem value="tritanopia">טריטנופיה</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            )}
+
+            {tabValue === 2 && (
+              <Box>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={keyboardNavigation}
+                      onChange={toggleKeyboardNavigation}
+                    />
+                  }
+                  label="ניווט מקלדת"
+                />
+
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={focusMode}
+                      onChange={toggleFocusMode}
+                    />
+                  }
+                  label="מצב מיקוד"
+                />
+
+                <Typography variant="subtitle2" gutterBottom sx={{ mt: 2 }}>
+                  מהירות קריאה
+                </Typography>
+                <Slider
+                  value={readerSpeed}
+                  onChange={handleReaderSpeedChange}
+                  min={0.5}
+                  max={2}
+                  step={0.1}
+                  marks
+                  valueLabelDisplay="auto"
+                />
+
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={textToSpeech}
+                      onChange={toggleTextToSpeech}
+                    />
+                  }
+                  label="קריאה קולית"
+                />
+              </Box>
+            )}
+
+            <Divider sx={{ my: 2 }} />
+
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Button
+                startIcon={<InfoIcon />}
+                onClick={toggleShortcutsInfo}
+                size="small"
+              >
+                קיצורי מקלדת
+              </Button>
+              <Button
+                startIcon={<ReplayIcon />}
+                onClick={resetAllSettings}
+                size="small"
+              >
+                איפוס
+              </Button>
+            </Box>
           </Box>
-        </Box>
+        </Popover>
 
-        {/* Color Contrast */}
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="subtitle1">ניגודיות צבעים</Typography>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={highContrast}
-                onChange={toggleHighContrast}
-                color="primary"
-              />
-            }
-            label="ניגודיות גבוהה"
-          />
-        </Box>
-
-        {/* Dyslexic Font */}
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="subtitle1">סוג גופן</Typography>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={dyslexicFont}
-                onChange={handleDyslexicFontToggle}
-                color="primary"
-              />
-            }
-            label="גופן ידידותי לדיסלקטים"
-          />
-        </Box>
-
-        {/* Focus Mode */}
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="subtitle1">מצב מיקוד</Typography>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={focusMode}
-                onChange={toggleFocusMode}
-                color="primary"
-              />
-            }
-            label="הדגש אזור מוקד בעת ריחוף"
-          />
-        </Box>
-
-        {/* Reduced Motion */}
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="subtitle1">הפחתת אנימציות</Typography>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={reduceMotion}
-                onChange={toggleReduceMotion}
-                color="primary"
-              />
-            }
-            label="הפחת תנועה והנפשות"
-          />
-        </Box>
-
-        {/* Text to Speech */}
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="subtitle1">המרת טקסט לדיבור</Typography>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={textToSpeech}
-                onChange={toggleTextToSpeech}
-                color="primary"
-              />
-            }
-            label="הפעל קריאת טקסט (Alt+Shift+T)"
-          />
-          <Typography variant="caption" sx={{ display: 'block', mt: 0.5 }}>
-            סמן טקסט כלשהו באתר ולחץ Alt+Shift+T כדי להאזין לו
-          </Typography>
-        </Box>
-
-        {/* Direct Call */}
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="subtitle1">שיחה ישירה</Typography>
-          <Button
-            variant="contained"
-            startIcon={<LocalPhoneIcon />}
-            onClick={handlePhoneCall}
-            sx={{ 
-              mt: 1, 
-              bgcolor: '#4CAF50', 
-              '&:hover': { bgcolor: '#45a049' } 
-            }}
-          >
-            התקשר לקבלת סיוע
-          </Button>
-          <Typography variant="caption" sx={{ display: 'block', mt: 0.5 }}>
-            לחץ כדי להתקשר לצוות התמיכה שלנו
-          </Typography>
-        </Box>
-
-        {/* Keyboard Shortcuts */}
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
-          <Button
-            size="small"
-            onClick={toggleShortcutsInfo}
-            startIcon={<KeyboardIcon />}
-          >
-            קיצורי מקלדת
-          </Button>
-        </Box>
-      </Menu>
-
-      {/* Keyboard shortcuts info popover */}
-      <Popover
-        open={shortcutsOpen}
-        anchorEl={shortcutsAnchorEl}
-        onClose={() => setShortcutsAnchorEl(null)}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-      >
-        <Box sx={{ p: 3, width: 300, maxWidth: '100%' }}>
-          <Typography variant="h6" sx={{ mb: 2 }}>קיצורי מקלדת</Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            <Typography variant="body2">Alt+Shift+A: תפריט נגישות</Typography>
-            <Typography variant="body2">Alt+Shift+C: החלפת ניגודיות</Typography>
-            <Typography variant="body2">Alt+Shift+D: פונט דיסלקטי</Typography>
-            <Typography variant="body2">Alt+Shift+F: מצב מיקוד</Typography>
-            <Typography variant="body2">Alt+Shift+M: הפחתת תנועה</Typography>
-            <Typography variant="body2">Alt+Shift+Plus: הגדלת טקסט</Typography>
-            <Typography variant="body2">Alt+Shift+Minus: הקטנת טקסט</Typography>
-            <Typography variant="body2">Alt+Shift+T: המרת טקסט לדיבור</Typography>
-            <Typography variant="body2">Alt+Shift+P: שיחת טלפון ישירה</Typography>
+        <Menu
+          anchorEl={shortcutsAnchorEl}
+          open={shortcutsOpen}
+          onClose={() => setShortcutsAnchorEl(null)}
+        >
+          <Box sx={{ p: 2, width: 300 }}>
+            <Typography variant="subtitle1" gutterBottom>
+              קיצורי מקלדת
+            </Typography>
+            <Grid container spacing={1}>
+              <Grid item xs={12}>
+                <Typography variant="body2">
+                  Alt + A: פתיחת תפריט נגישות
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="body2">
+                  Alt + C: התקשרות
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="body2">
+                  Alt + W: WhatsApp
+                </Typography>
+              </Grid>
+            </Grid>
           </Box>
-        </Box>
-      </Popover>
-    </Box>
+        </Menu>
+      </Box>
+    </>
   );
 };
 
